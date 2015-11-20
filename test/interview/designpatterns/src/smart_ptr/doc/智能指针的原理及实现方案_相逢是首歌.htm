@@ -1,0 +1,1170 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<!-- saved from url=(0071)http://hi.baidu.com/tianling_xu/blog/item/22dd0e5506b31ac7b645aeff.html -->
+<!--STATUS OK--><HTML><HEAD><TITLE>智能指针的原理及实现方案_相逢是首歌</TITLE>
+<META http-equiv=content-type content="text/html; charset=gb2312">
+<STYLE>.error {
+	FONT-SIZE: 12px; COLOR: #ff0000
+}
+</STYLE>
+
+<SCRIPT language=javascript src="智能指针的原理及实现方案_相逢是首歌_files/popup.js"></SCRIPT>
+
+<SCRIPT language=JavaScript src="智能指针的原理及实现方案_相逢是首歌_files/g_spjs.js"></SCRIPT>
+
+<SCRIPT language=javascript>
+<!--
+
+var allkey="";
+var i=0;
+var flag=0;
+function setpv(allnum)
+{
+	var num = allnum.split('_');
+	document.getElementById("result").innerHTML=num[0];
+}
+		 
+function checkMail(s) 
+{ 
+  	var pattern=/\w+@\w+\.[a-z]+/; 
+  	if(pattern.test(s)) 
+    { 
+       return true; 
+    } 
+  	else 
+   { 
+      return false; 
+   } 
+} 
+
+
+function checkeandu(eanduid)
+{
+	var eanduvalue=G(eanduid).value;
+	var len=bytes(eanduvalue);
+	if(len>128)
+	{
+		showErr(2,"您输入的网址或邮箱太长，请保持在128字节以内。");
+		return false;
+	}
+	else
+	{ 
+		 return true;
+	}
+		
+}
+
+function cmtdel(str)
+{
+	var pop=new Popup({ contentType:3,isReloadOnClose:false,width:340,height:80});
+	pop.setContent("title","删除评论");
+	pop.setContent("confirmCon","您确定要彻底删除这条评论吗？");
+	pop.setContent("callBack",delCallback2);
+	pop.setContent("parameter",{fid:str,popup:pop});
+	pop.build();
+	pop.show();
+	return false;
+}
+function delCallback2(para)
+{
+	var o_pop=para["popup"];
+	o_pop.config.contentType=1;
+	o_pop.setContent("contentUrl","");
+	o_pop.reBuild();
+	G(para["fid"]).target=o_pop.iframeIdName;
+	eval("document."+para["fid"]).submit();
+}
+
+
+
+function checkname(strid)
+{
+	var ele=document.getElementById(strid);
+	var len=bytes(ele.value);
+	if(len>49)
+	{
+		showErr(1,"您输入的姓名太长，请保持在49字节以内。");
+		return false;
+	}
+	else 
+	{		
+		if(len==0)
+		{
+			document.getElementById(strid).value="匿名网友";
+		}
+		 return true;
+	}	
+	
+}
+
+function checktext(textid)
+{
+		document.getElementById(textid).value=trimlr(textid);
+		var str=trimrn(textid);
+		len=str.length;
+		if(len==0 || ((/^[\s,　]+$/gi).test(str)) )
+		{
+			showErr(3,"您必须输入评论内容，请检查。");
+			return false;
+		}
+		else 
+		{
+				if(len>1000)
+				{
+					showErr(3,"您输入的评论内容太长，请保持在500字以内。");
+					return false;
+				}
+			return true;
+		}	
+}
+
+function showErr(index,str)
+{
+	G(index+"_err").style.display="";
+	G(index+"_err_con").innerHTML=str;
+}
+function hidErr(index)
+{
+	G(index+"_err").style.display="none";
+	G(index+"_err_con").innerHTML="";
+}
+
+function alertPop(tit,con)
+{
+	var pop=new Popup({ contentType:4,isReloadOnClose:false,width:340,height:80});
+	pop.setContent("title",tit);
+	pop.setContent("alertCon",con);
+	pop.build();
+	pop.show();
+}
+
+function cmtfull()
+{
+	var cnum=0;
+	if(cnum>=50000)
+	{
+		alertPop("发表评论","单篇日志评论数最多为50000条.");
+		return false;
+	}
+	else
+	{
+		return true;
+	}
+}
+
+function checkcmtform()
+{
+	if(checkname("spBlogCmtor")&&checkeandu("spBlogCmtURL")&&checktext("spBlogCmtText")&&cmtfull())
+	{
+		submitForm();
+		return true;
+	}
+	else
+	{
+		return false;
+	}
+}
+
+var g_pop=null;
+function submitForm()
+{
+	g_pop=new Popup({ contentType:1,isReloadOnClose:false,width:340,height:80});
+	g_pop.setContent("title","添加评论");
+	g_pop.setContent("contentUrl","");
+	g_pop.setContent("someDisabledBtn","btn_ok");
+	g_pop.build();
+	G("popFormSubmit").target=g_pop.iframeIdName;
+	g_pop.show();
+}
+
+function g_close_pop()
+{
+	g_pop.close();
+}
+
+function formatonlinpic()
+{
+var picobj=document.getElementsByName("onlinepic");
+var picnum=picobj.length;
+	
+	for(var i=0;i<picnum;i++)
+	{
+		if(picobj[i].width>200)
+		{
+			picobj[i].width=200;
+		}
+		if(picobj[i].height>200)
+		{
+			picobj[i].height=200;
+		}
+	}
+
+}
+
+function addToFavor(){
+var blogTitle='智能指针的原理及实现方案'.replace(/&#39;/g,'\'');
+window.open('http://cang.baidu.com/do/add?it='+encodeURIComponent(blogTitle+'_百度空间')+'&iu='+encodeURIComponent(location.href)+'&fr=sp#nw=1','_s','scrollbars=no,width=600,height=450,right=75,top=20,status=no,resizable=yes'); 
+return false;
+}
+//-->
+</SCRIPT>
+
+<SCRIPT type=text/javascript>
+/*<![CDATA[*/
+var RelatedDocData = null, GetAndEval = false;
+(function(){
+	var getXhr = function(){
+		var xhr = null;
+        try{
+            return (xhr = new XMLHttpRequest());
+        }catch(e){}
+
+		for(var i = 0, a = ['MSXML3','MSXML2','Microsoft']; i < a.length; i ++){
+			try{
+				xhr = new ActiveXObject(a[i]+'.XMLHTTP');
+				break;
+			}catch(ex){}
+		}
+
+		return xhr;
+	}
+
+	var xhr = getXhr();
+	if(xhr == null){
+		RelatedDocData = -1;
+		return;
+	}
+
+	xhr.open("GET", "/sys/search?type=8&word=%D6%C7%C4%DC%D6%B8%D5%EB%B5%C4%D4%AD%C0%ED%BC%B0%CA%B5%CF%D6%B7%BD%B0%B8&item=22dd0e5506b31ac7b645aeff&t=" + new Date().getTime(), true);	
+	xhr.onreadystatechange = function(){
+		if(xhr.readyState == 4){
+			if(xhr.status == 0 || xhr.status == 200){
+				if(GetAndEval){
+					eval(xhr.responseText);
+				}else{
+					RelatedDocData = xhr.responseText;
+				}
+			}
+		}
+	}
+	xhr.send(null);
+})();
+/*]]>*/
+</SCRIPT>
+
+<META content="MSHTML 6.00.2900.3199" name=GENERATOR></HEAD>
+<BODY onload=formatonlinpic();>
+<CENTER>
+<SCRIPT language=JavaScript>
+<!--
+if (top.location != self.location) 
+{
+	top.location=self.location;
+}
+//-->
+</SCRIPT>
+<LINK href="智能指针的原理及实现方案_相逢是首歌_files/611f3e87e050352ac65cc388.css" type=text/css 
+rel=stylesheet><LINK href="智能指针的原理及实现方案_相逢是首歌_files/space.css" type=text/css 
+rel=stylesheet>
+<STYLE type=text/css>#usrbar {
+	PADDING-RIGHT: 10px; PADDING-LEFT: 0px; FONT-SIZE: 12px; BACKGROUND: #ffffff; FILTER: alpha(opacity=65); PADDING-BOTTOM: 3px; WIDTH: 100%; COLOR: #000000; LINE-HEIGHT: 19px; PADDING-TOP: 4px; FONT-FAMILY: Arial; LETTER-SPACING: normal; HEIGHT: 19px; TEXT-ALIGN: right; moz-opacity: 0.5
+}
+#usrbar A {
+	COLOR: #0000cc; TEXT-DECORATION: underline
+}
+#usrbar A:link {
+	COLOR: #0000cc; TEXT-DECORATION: underline
+}
+#usrbar A:visited {
+	COLOR: #0000cc; TEXT-DECORATION: underline
+}
+#ft {
+	CLEAR: both; FONT-SIZE: 12px; COLOR: #666666; LINE-HEIGHT: 20px; FONT-FAMILY: Arial; HEIGHT: 20px; TEXT-ALIGN: center
+}
+#ft A {
+	COLOR: #7777cc; TEXT-DECORATION: underline
+}
+#ft A:link {
+	COLOR: #7777cc; TEXT-DECORATION: underline
+}
+#ft A:visited {
+	COLOR: #7777cc; TEXT-DECORATION: underline
+}
+#usrbar {
+	LETTER-SPACING: normal
+}
+#usrbar A {
+	LETTER-SPACING: normal
+}
+#usrbar A:link {
+	LETTER-SPACING: normal
+}
+#usrbar A:visited {
+	LETTER-SPACING: normal
+}
+#ft {
+	LETTER-SPACING: normal
+}
+#ft A {
+	LETTER-SPACING: normal
+}
+#ft A:link {
+	LETTER-SPACING: normal
+}
+#ft A:visited {
+	LETTER-SPACING: normal
+}
+</STYLE>
+
+<DIV id=usrbar><NOBR>
+<SCRIPT> var myref = encodeURI("http://hi.baidu.com/tianling%5Fxu/blog/item/22dd0e5506b31ac7b645aeff%2Ehtml");</SCRIPT>
+<A href="http://www.baidu.com/" target=_blank>百度首页</A> | <A 
+href="http://hi.baidu.com/" target=_blank>百度空间</A>
+<SCRIPT language=JavaScript>
+        document.write(" | <a href='http://passport.baidu.com/?login&tpl=sp&tpl_reg=sp&u="+myref+"'>登录</a>");
+        </SCRIPT>
+ </NOBR></DIV>
+<DIV id=main align=left><!--[if IE]>
+<SCRIPT>
+var objmain = document.getElementById("main");
+function updatesize(){ var bodyw = window.document.body.offsetWidth; if(bodyw <= 790) objmain.style.width="772px"; else if(bodyw >= 1016) objmain.style.width="996px"; else objmain.style.width="100%"; }
+updatesize(); window.onresize = updatesize;
+</SCRIPT>
+<![endif]-->
+<DIV id=header>
+<DIV class=lc>
+<DIV class=rc></DIV></DIV>
+<DIV class=tit><A class=titlink 
+title="tianling_xu的空间 http://hi.baidu.com/tianling_xu" 
+href="http://hi.baidu.com/tianling_xu">相逢是首歌</A></DIV>
+<DIV class=desc>生活随笔、杂文、技术文档</DIV>
+<DIV id=tabline></DIV>
+<DIV id=tab><A href="http://hi.baidu.com/tianling_xu">主页</A><A class=on 
+href="http://hi.baidu.com/tianling_xu/blog">博客</A><A 
+href="http://hi.baidu.com/tianling_xu/album">相册</A><SPAN>|</SPAN><A 
+href="http://hi.baidu.com/tianling_xu/profile">个人档案</A> <SPAN>|</SPAN><A 
+href="http://hi.baidu.com/tianling_xu/friends">好友</A> </DIV></DIV>
+<DIV class=stage>
+<DIV class=stagepad>
+<DIV style="WIDTH: 100%">
+<TABLE class=modth cellSpacing=0 cellPadding=0 width="100%" border=0>
+  <TBODY>
+  <TR>
+    <TD class=modtl width=7>&nbsp;</TD>
+    <TD class=modtc noWrap>
+      <DIV class=modhead><SPAN class=modtit>查看文章</SPAN></DIV></TD>
+    <TD class=modtc noWrap align=right></TD>
+    <TD class=modtr width=7>&nbsp;</TD></TR></TBODY></TABLE>
+<DIV class=modbox id=m_blog>
+<DIV class=tit>智能指针的原理及实现方案</DIV>
+<DIV class=date>2007-12-14 10:23</DIV>
+<TABLE style="TABLE-LAYOUT: fixed">
+  <TBODY>
+  <TR>
+    <TD>
+      <DIV class=cnt>本文主要讨论C++程序设计的一种常用技术——智能指针（smart 
+      pointer），主要内容包括引用计数（reference count）和句柄类(handle 
+      class)。如果文中有错误或遗漏之处，敬请指出，谢谢！ <BR>
+      <HR>
+
+      <DIV>&nbsp;&nbsp; 
+      当类中有指针成员时，一般有两种方式来管理指针成员：一是采用值型的方式管理，每个类对象都保留一份指针指向的对象的拷贝；另一种更优雅的方式是使用智能指针，从而实现指针指向的对象的共享。</DIV>
+      <DIV></DIV>
+      <DIV>&nbsp;&nbsp; 智能指针(smart pointer)的一种通用实现技术是使用引用计数(reference 
+      count)。智能指针类将一个计数器与类指向的对象相关联，引用计数跟踪该类有多少个对象共享同一指针。</DIV>
+      <DIV></DIV>
+      <DIV>&nbsp;&nbsp; 
+      每次创建类的新对象时，初始化指针并将引用计数置为1；当对象作为另一对象的副本而创建时，拷贝构造函数拷贝指针并增加与之相应的引用计数；对一个对象进行赋值时，赋值操作符减少左操作数所指对象的引用计数（如果引用计数为减至0，则删除对象），并增加右操作数所指对象的引用计数；调用析构函数时，构造函数减少引用计数（如果引用计数减至0，则删除基础对象）。</DIV>
+      <DIV></DIV>
+      <DIV>&nbsp;&nbsp; 实现引用计数有两种经典策略：一是引入辅助类，二是使用句柄类。下面分别介绍这些内容。</DIV>
+      <DIV></DIV>
+      <DIV>
+      <HR>
+      </DIV>
+      <DIV><FONT color=#ff9900>问题描述</FONT></DIV>
+      <DIV></DIV>
+      <DIV>&nbsp;&nbsp; 假设有一个名为TestPtr的类，里面有一个指针成员，简化为如下代码： 
+      <TABLE style="WIDTH: 463px; HEIGHT: 110px" cellSpacing=1 cellPadding=1 
+      width=463 border=1>
+        <TBODY>
+        <TR>
+          <TD>
+            <P><CODE><SPAN style="COLOR: #000000"><FONT face=新宋体><SPAN 
+            style="COLOR: #0000ff">class</SPAN> TestPtr <BR><SPAN 
+            style="COLOR: #0000cc">{</SPAN><BR><SPAN 
+            style="COLOR: #0000ff">public</SPAN><SPAN 
+            style="COLOR: #0000cc">:</SPAN><BR>&nbsp;&nbsp;&nbsp;&nbsp; 
+            TestPtr<SPAN style="COLOR: #0000cc">(</SPAN><SPAN 
+            style="COLOR: #0000ff">int</SPAN> <SPAN 
+            style="COLOR: #0000cc">*</SPAN>p<SPAN 
+            style="COLOR: #0000cc">)</SPAN><SPAN style="COLOR: #0000cc">:</SPAN> 
+            ptr<SPAN style="COLOR: #0000cc">(</SPAN>p<SPAN 
+            style="COLOR: #0000cc">)</SPAN> <SPAN 
+            style="COLOR: #0000cc">{</SPAN> <SPAN 
+            style="COLOR: #0000cc">}<BR>&nbsp;&nbsp;&nbsp; ~<FONT 
+            color=#000000>TestPtr</FONT>( ) { delete <FONT 
+            color=#000000>ptr</FONT>; }<BR>&nbsp;&nbsp;&nbsp; <FONT 
+            color=#ff9900>// other operations</FONT></SPAN><BR><SPAN 
+            style="COLOR: #0000ff">private</SPAN><SPAN 
+            style="COLOR: #0000cc">:</SPAN><BR>&nbsp;&nbsp;&nbsp;&nbsp;<SPAN 
+            style="COLOR: #0000ff">int</SPAN> <SPAN 
+            style="COLOR: #0000cc">*</SPAN>ptr<SPAN 
+            style="COLOR: #0000cc">;<BR>&nbsp;&nbsp;&nbsp; <FONT 
+            color=#ff9900>// other 
+            data</FONT></SPAN></FONT></SPAN></CODE><CODE><SPAN 
+            style="COLOR: #000000"><FONT face=新宋体><BR><SPAN 
+            style="COLOR: #0000cc">}</SPAN><SPAN 
+            style="COLOR: #0000cc">;</SPAN></FONT></SPAN></CODE></P></TD></TR></TBODY></TABLE></DIV>
+      <DIV></DIV>
+      <DIV>在这种情况下，类TestPtr对象的任何拷贝、赋值操作都会使多个TestPtr对象共享相同的指针。但在一个对象发生析构时，指针指向的对象将被释放，从而可能引起悬垂指针。</DIV>
+      <DIV></DIV>
+      <DIV>&nbsp;&nbsp; 
+      现在我们使用引用计数来解决这个问题，一个新的问题是引用计数放在哪里。显然，不能放在TestPtr类中，因为多个对象共享指针时无法同步更新引用计数。</DIV>
+      <DIV></DIV>
+      <DIV>
+      <HR>
+      </DIV>
+      <DIV><FONT color=#ff9900>方案一</FONT></DIV>
+      <DIV></DIV>
+      <DIV>&nbsp;&nbsp; 
+      这里给出的解决方案是，定义一个单独的具体类（RefPtr）来封装指针和相应的引用计数。由于这个类只是用于对类TestPtr中的成员指针ptr进行了封装，无其它用途，所以把引用计数类RefPtr的所有成员均定义为private，并把类TestPtr声明为它的友元类，使TestPtr类可以访问RefPtr类。示例代码如下：</DIV>
+      <DIV>
+      <TABLE style="WIDTH: 550px; HEIGHT: 678px" cellSpacing=1 cellPadding=1 
+      width=550 border=1>
+        <TBODY>
+        <TR>
+          <TD><CODE><SPAN style="COLOR: #000000"><SPAN style="COLOR: #0000ff">
+            <P style="MARGIN: 5px; LINE-HEIGHT: 150%"><CODE><SPAN 
+            style="COLOR: #000000"><FONT face=新宋体><SPAN 
+            style="COLOR: #0000ff">class</SPAN> RefPtr <BR><SPAN 
+            style="COLOR: #0000cc">{</SPAN><BR>&nbsp;&nbsp;&nbsp;&nbsp;<SPAN 
+            style="COLOR: #0000ff">friend</SPAN> <SPAN 
+            style="COLOR: #0000ff">class</SPAN> TestPtr<SPAN 
+            style="COLOR: #0000cc">;</SPAN><BR>&nbsp;&nbsp;&nbsp;&nbsp;<SPAN 
+            style="COLOR: #0000ff">int</SPAN> <SPAN 
+            style="COLOR: #0000cc">*</SPAN>ptr<SPAN 
+            style="COLOR: #0000cc">;</SPAN><BR>&nbsp;&nbsp;&nbsp;&nbsp;<SPAN 
+            style="COLOR: #ff0000">size_t</SPAN> <SPAN 
+            style="COLOR: #ff0000">count</SPAN><SPAN 
+            style="COLOR: #0000cc">;</SPAN><BR>&nbsp;&nbsp;&nbsp;&nbsp; RefPtr 
+            <SPAN style="COLOR: #0000cc">(</SPAN><SPAN 
+            style="COLOR: #0000ff">int</SPAN> <SPAN 
+            style="COLOR: #0000cc">*</SPAN>p<SPAN 
+            style="COLOR: #0000cc">)</SPAN><SPAN style="COLOR: #0000cc">:</SPAN> 
+            ptr<SPAN style="COLOR: #0000cc">(</SPAN>p<SPAN 
+            style="COLOR: #0000cc">)</SPAN><SPAN style="COLOR: #0000cc">,</SPAN> 
+            <SPAN style="COLOR: #ff0000">count</SPAN><SPAN 
+            style="COLOR: #0000cc">(</SPAN>1<SPAN 
+            style="COLOR: #0000cc">)</SPAN> <SPAN 
+            style="COLOR: #0000cc">{</SPAN><SPAN 
+            style="COLOR: #0000cc">}</SPAN><BR>&nbsp;&nbsp;&nbsp;&nbsp;<SPAN 
+            style="COLOR: #0000cc">~</SPAN>RefPtr <SPAN 
+            style="COLOR: #0000cc">(</SPAN><SPAN style="COLOR: #0000cc">)</SPAN> 
+            <SPAN 
+            style="COLOR: #0000cc">{</SPAN><BR>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<SPAN 
+            style="COLOR: #0000ff">delete</SPAN> ptr<SPAN 
+            style="COLOR: #0000cc">;</SPAN><BR>&nbsp;&nbsp;&nbsp;&nbsp;<SPAN 
+            style="COLOR: #0000cc">}</SPAN><BR><SPAN 
+            style="COLOR: #0000cc">}</SPAN><SPAN 
+            style="COLOR: #0000cc">;</SPAN><BR><BR><SPAN 
+            style="COLOR: #0000ff">class</SPAN> TestPtr <BR><SPAN 
+            style="COLOR: #0000cc">{</SPAN><BR><SPAN 
+            style="COLOR: #0000ff">public</SPAN><SPAN 
+            style="COLOR: #0000cc">:</SPAN><BR>&nbsp;&nbsp;&nbsp;&nbsp; 
+            TestPtr<SPAN style="COLOR: #0000cc">(</SPAN><SPAN 
+            style="COLOR: #0000ff">int</SPAN> <SPAN 
+            style="COLOR: #0000cc">*</SPAN>p<SPAN 
+            style="COLOR: #0000cc">)</SPAN><SPAN style="COLOR: #0000cc">:</SPAN> 
+            ptr<SPAN style="COLOR: #0000cc">(</SPAN><SPAN 
+            style="COLOR: #0000ff">new</SPAN> RefPtr<SPAN 
+            style="COLOR: #0000cc">(</SPAN>p<SPAN 
+            style="COLOR: #0000cc">)</SPAN><SPAN style="COLOR: #0000cc">)</SPAN> 
+            <SPAN style="COLOR: #0000cc">{</SPAN> <SPAN 
+            style="COLOR: #0000cc">}</SPAN><BR>&nbsp;&nbsp;&nbsp;&nbsp; 
+            TestPtr<SPAN style="COLOR: #0000cc">(</SPAN><SPAN 
+            style="COLOR: #0000ff">const</SPAN> TestPtr<SPAN 
+            style="COLOR: #0000cc">&amp;</SPAN> src<SPAN 
+            style="COLOR: #0000cc">)</SPAN><SPAN style="COLOR: #0000cc">:</SPAN> 
+            ptr<SPAN style="COLOR: #0000cc">(</SPAN>src<SPAN 
+            style="COLOR: #0000cc">.</SPAN>ptr<SPAN 
+            style="COLOR: #0000cc">)</SPAN> <SPAN 
+            style="COLOR: #0000cc">{</SPAN><BR>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<SPAN 
+            style="COLOR: #0000cc">+</SPAN><SPAN 
+            style="COLOR: #0000cc">+</SPAN>ptr<SPAN 
+            style="COLOR: #0000cc">-</SPAN><SPAN 
+            style="COLOR: #0000cc">&gt;</SPAN><SPAN 
+            style="COLOR: #ff0000">count</SPAN><SPAN 
+            style="COLOR: #0000cc">;</SPAN><BR>&nbsp;&nbsp;&nbsp;&nbsp;<SPAN 
+            style="COLOR: #0000cc">}</SPAN><BR>&nbsp;&nbsp;&nbsp;&nbsp; 
+            TestPtr<SPAN style="COLOR: #0000cc">&amp;</SPAN> <SPAN 
+            style="COLOR: #0000ff">operator</SPAN><SPAN 
+            style="COLOR: #0000cc">=</SPAN> <SPAN 
+            style="COLOR: #0000cc">(</SPAN><SPAN 
+            style="COLOR: #0000ff">const</SPAN> TestPtr<SPAN 
+            style="COLOR: #0000cc">&amp;</SPAN> rhs<SPAN 
+            style="COLOR: #0000cc">)</SPAN> <SPAN 
+            style="COLOR: #0000cc">{</SPAN><BR>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</FONT><FONT 
+            face=新宋体><SPAN style="COLOR: #ff9900">// self-assigning is also 
+            right</SPAN><BR>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<SPAN 
+            style="COLOR: #0000cc">+</SPAN><SPAN 
+            style="COLOR: #0000cc">+</SPAN>rhs<SPAN 
+            style="COLOR: #0000cc">.</SPAN>ptr<SPAN 
+            style="COLOR: #0000cc">-</SPAN><SPAN 
+            style="COLOR: #0000cc">&gt;</SPAN><SPAN 
+            style="COLOR: #ff0000">count</SPAN><SPAN 
+            style="COLOR: #0000cc">;</SPAN><BR>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<SPAN 
+            style="COLOR: #0000ff">if</SPAN> <SPAN 
+            style="COLOR: #0000cc">(</SPAN><SPAN 
+            style="COLOR: #0000cc">-</SPAN><SPAN 
+            style="COLOR: #0000cc">-</SPAN>ptr<SPAN 
+            style="COLOR: #0000cc">-</SPAN><SPAN 
+            style="COLOR: #0000cc">&gt;</SPAN><SPAN 
+            style="COLOR: #ff0000">count</SPAN> <SPAN 
+            style="COLOR: #0000cc">=</SPAN><SPAN style="COLOR: #0000cc">=</SPAN> 
+            0<SPAN 
+            style="COLOR: #0000cc">)</SPAN><BR>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<SPAN 
+            style="COLOR: #0000ff">delete</SPAN> ptr<SPAN 
+            style="COLOR: #0000cc">;</SPAN><BR>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+            ptr <SPAN style="COLOR: #0000cc">=</SPAN> rhs<SPAN 
+            style="COLOR: #0000cc">.</SPAN>ptr<SPAN 
+            style="COLOR: #0000cc">;</SPAN><BR>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<SPAN 
+            style="COLOR: #0000ff">return</SPAN> <SPAN 
+            style="COLOR: #0000cc">*</SPAN><SPAN 
+            style="COLOR: #0000ff">this</SPAN><SPAN 
+            style="COLOR: #0000cc">;</SPAN><BR>&nbsp;&nbsp;&nbsp;&nbsp;<SPAN 
+            style="COLOR: #0000cc">}</SPAN><BR>&nbsp;&nbsp;&nbsp;&nbsp;<SPAN 
+            style="COLOR: #0000cc">~</SPAN>TestPtr<SPAN 
+            style="COLOR: #0000cc">(</SPAN><SPAN style="COLOR: #0000cc">)</SPAN> 
+            <SPAN 
+            style="COLOR: #0000cc">{</SPAN><BR>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<SPAN 
+            style="COLOR: #0000ff">if</SPAN> <SPAN 
+            style="COLOR: #0000cc">(</SPAN><SPAN 
+            style="COLOR: #0000cc">-</SPAN><SPAN 
+            style="COLOR: #0000cc">-</SPAN>ptr<SPAN 
+            style="COLOR: #0000cc">-</SPAN><SPAN 
+            style="COLOR: #0000cc">&gt;</SPAN><SPAN 
+            style="COLOR: #ff0000">count</SPAN> <SPAN 
+            style="COLOR: #0000cc">=</SPAN><SPAN style="COLOR: #0000cc">=</SPAN> 
+            0<SPAN 
+            style="COLOR: #0000cc">)</SPAN><BR>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<SPAN 
+            style="COLOR: #0000ff">delete</SPAN> ptr<SPAN 
+            style="COLOR: #0000cc">;</SPAN><BR>&nbsp;&nbsp;&nbsp;&nbsp;<SPAN 
+            style="COLOR: #0000cc">}</SPAN><BR><SPAN 
+            style="COLOR: #0000ff">private</SPAN><SPAN 
+            style="COLOR: #0000cc">:</SPAN><BR>&nbsp;&nbsp;&nbsp;&nbsp; RefPtr 
+            <SPAN style="COLOR: #0000cc">*</SPAN>ptr<SPAN 
+            style="COLOR: #0000cc">;</SPAN><BR><SPAN 
+            style="COLOR: #0000cc">}</SPAN><SPAN 
+            style="COLOR: #0000cc">;</SPAN></FONT></SPAN></CODE></P></SPAN></SPAN></CODE></TD></TR></TBODY></TABLE></DIV>
+      <DIV></DIV>
+      <DIV>&nbsp;&nbsp; 
+      当希望每个TestPtr对象中的指针所指向的内容改变而不影响其它对象的指针所指向的内容时，可以在发生修改时，创建新的对象，并修改相应的引用计数。这种技术的一个实例就是写时拷贝（Copy-On-Write）。</DIV>
+      <DIV></DIV>
+      <DIV>&nbsp;&nbsp; 
+      这种方案的缺点是每个含有指针的类的实现代码中都要自己控制引用计数，比较繁琐。特别是当有多个这类指针时，维护引用计数比较困难。</DIV>
+      <DIV></DIV>
+      <DIV>
+      <HR>
+      </DIV>
+      <DIV><FONT color=#ff9900>方案二</FONT></DIV>
+      <DIV></DIV>
+      <DIV>&nbsp;&nbsp; 
+      为了避免上面方案中每个使用指针的类自己去控制引用计数，可以用一个类把指针封装起来。封装好后，这个类对象可以出现在用户类使用指针的任何地方，表现为一个指针的行为。我们可以像指针一样使用它，而不用担心普通成员指针所带来的问题，我们把这样的类叫句柄类。在封装句柄类时，需要申请一个动态分配的引用计数空间，指针与引用计数分开存储。实现示例如下：</DIV>
+      <DIV></DIV>
+      <DIV>
+      <TABLE style="WIDTH: 554px; HEIGHT: 1121px" cellSpacing=1 cellPadding=1 
+      width=554 border=1>
+        <TBODY>
+        <TR>
+          <TD>
+            <P style="MARGIN: 5px; LINE-HEIGHT: 150%"><CODE><SPAN 
+            style="COLOR: #000000"><CODE><SPAN style="COLOR: #000000"><FONT 
+            face=新宋体><SPAN style="COLOR: #0000cc">#</SPAN><SPAN 
+            style="COLOR: #ff0000">include</SPAN> <SPAN 
+            style="COLOR: #0000cc">&lt;</SPAN><SPAN 
+            style="COLOR: #ff0000">iostream</SPAN><SPAN 
+            style="COLOR: #0000cc">&gt;</SPAN><BR><SPAN 
+            style="COLOR: #0000cc">#</SPAN><SPAN 
+            style="COLOR: #ff0000">include</SPAN> <SPAN 
+            style="COLOR: #0000cc">&lt;</SPAN>stdexcept<SPAN 
+            style="COLOR: #0000cc">&gt;</SPAN><BR><SPAN 
+            style="COLOR: #0000ff">using</SPAN> <SPAN 
+            style="COLOR: #0000ff">namespace</SPAN> <SPAN 
+            style="COLOR: #ff0000">std</SPAN><SPAN 
+            style="COLOR: #0000cc">;</SPAN><BR><BR><SPAN 
+            style="COLOR: #0000cc">#</SPAN><SPAN 
+            style="COLOR: #ff0000">define</SPAN> TEST_SMARTPTR<BR><SPAN 
+            style="COLOR: #0000ff">class</SPAN> Stub<BR><SPAN 
+            style="COLOR: #0000cc">{</SPAN><BR><SPAN 
+            style="COLOR: #0000ff">public</SPAN><SPAN 
+            style="COLOR: #0000cc">:</SPAN><BR>&nbsp;&nbsp;&nbsp;&nbsp;<SPAN 
+            style="COLOR: #0000ff">void</SPAN> print<SPAN 
+            style="COLOR: #0000cc">(</SPAN><SPAN style="COLOR: #0000cc">)</SPAN> 
+            <SPAN 
+            style="COLOR: #0000cc">{</SPAN><BR>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<SPAN 
+            style="COLOR: #ff0000">cout</SPAN><SPAN 
+            style="COLOR: #0000cc">&lt;</SPAN><SPAN 
+            style="COLOR: #0000cc">&lt;</SPAN><SPAN 
+            style="COLOR: #ff00ff">"Stub: print"</SPAN><SPAN 
+            style="COLOR: #0000cc">&lt;</SPAN><SPAN 
+            style="COLOR: #0000cc">&lt;</SPAN><SPAN 
+            style="COLOR: #ff0000">endl</SPAN><SPAN 
+            style="COLOR: #0000cc">;</SPAN><BR>&nbsp;&nbsp;&nbsp;&nbsp;<SPAN 
+            style="COLOR: #0000cc">}</SPAN><BR>&nbsp;&nbsp;&nbsp;&nbsp;<SPAN 
+            style="COLOR: #0000cc">~</SPAN>Stub<SPAN 
+            style="COLOR: #0000cc">(</SPAN><SPAN 
+            style="COLOR: #0000cc">)</SPAN><SPAN 
+            style="COLOR: #0000cc">{</SPAN><BR>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<SPAN 
+            style="COLOR: #ff0000">cout</SPAN><SPAN 
+            style="COLOR: #0000cc">&lt;</SPAN><SPAN 
+            style="COLOR: #0000cc">&lt;</SPAN><SPAN 
+            style="COLOR: #ff00ff">"Stub: Destructor"</SPAN><SPAN 
+            style="COLOR: #0000cc">&lt;</SPAN><SPAN 
+            style="COLOR: #0000cc">&lt;</SPAN><SPAN 
+            style="COLOR: #ff0000">endl</SPAN><SPAN 
+            style="COLOR: #0000cc">;</SPAN><BR>&nbsp;&nbsp;&nbsp;&nbsp;<SPAN 
+            style="COLOR: #0000cc">}</SPAN><BR><SPAN 
+            style="COLOR: #0000cc">}</SPAN><SPAN 
+            style="COLOR: #0000cc">;</SPAN><BR><BR><SPAN 
+            style="COLOR: #0000ff">template</SPAN> <SPAN 
+            style="COLOR: #0000cc">&lt;</SPAN><SPAN 
+            style="COLOR: #0000ff">typename</SPAN> T<SPAN 
+            style="COLOR: #0000cc">&gt;</SPAN><BR><SPAN 
+            style="COLOR: #0000ff">class</SPAN> SmartPtr <BR><SPAN 
+            style="COLOR: #0000cc">{</SPAN><BR><SPAN 
+            style="COLOR: #0000ff">public</SPAN><SPAN 
+            style="COLOR: #0000cc">:</SPAN><BR>&nbsp;&nbsp;&nbsp;&nbsp; 
+            SmartPtr<SPAN style="COLOR: #0000cc">(</SPAN>T <SPAN 
+            style="COLOR: #0000cc">*</SPAN>p <SPAN 
+            style="COLOR: #0000cc">=</SPAN> 0<SPAN 
+            style="COLOR: #0000cc">)</SPAN><SPAN style="COLOR: #0000cc">:</SPAN> 
+            ptr<SPAN style="COLOR: #0000cc">(</SPAN>p<SPAN 
+            style="COLOR: #0000cc">)</SPAN><SPAN style="COLOR: #0000cc">,</SPAN> 
+            pUse<SPAN style="COLOR: #0000cc">(</SPAN><SPAN 
+            style="COLOR: #0000ff">new</SPAN> <SPAN 
+            style="COLOR: #ff0000">size_t</SPAN><SPAN 
+            style="COLOR: #0000cc">(</SPAN>1<SPAN 
+            style="COLOR: #0000cc">)</SPAN><SPAN style="COLOR: #0000cc">)</SPAN> 
+            <SPAN style="COLOR: #0000cc">{</SPAN> <SPAN 
+            style="COLOR: #0000cc">}</SPAN><BR>&nbsp;&nbsp;&nbsp;&nbsp; 
+            SmartPtr<SPAN style="COLOR: #0000cc">(</SPAN><SPAN 
+            style="COLOR: #0000ff">const</SPAN> SmartPtr<SPAN 
+            style="COLOR: #0000cc">&amp;</SPAN> src<SPAN 
+            style="COLOR: #0000cc">)</SPAN><SPAN style="COLOR: #0000cc">:</SPAN> 
+            ptr<SPAN style="COLOR: #0000cc">(</SPAN>src<SPAN 
+            style="COLOR: #0000cc">.</SPAN>ptr<SPAN 
+            style="COLOR: #0000cc">)</SPAN><SPAN style="COLOR: #0000cc">,</SPAN> 
+            pUse<SPAN style="COLOR: #0000cc">(</SPAN>src<SPAN 
+            style="COLOR: #0000cc">.</SPAN>pUse<SPAN 
+            style="COLOR: #0000cc">)</SPAN> <SPAN 
+            style="COLOR: #0000cc">{</SPAN><BR>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<SPAN 
+            style="COLOR: #0000cc">+</SPAN><SPAN 
+            style="COLOR: #0000cc">+</SPAN><SPAN 
+            style="COLOR: #0000cc">*</SPAN>pUse<SPAN 
+            style="COLOR: #0000cc">;</SPAN><BR>&nbsp;&nbsp;&nbsp;&nbsp;<SPAN 
+            style="COLOR: #0000cc">}</SPAN><BR>&nbsp;&nbsp;&nbsp;&nbsp; 
+            SmartPtr<SPAN style="COLOR: #0000cc">&amp;</SPAN> <SPAN 
+            style="COLOR: #0000ff">operator</SPAN><SPAN 
+            style="COLOR: #0000cc">=</SPAN> <SPAN 
+            style="COLOR: #0000cc">(</SPAN><SPAN 
+            style="COLOR: #0000ff">const</SPAN> SmartPtr<SPAN 
+            style="COLOR: #0000cc">&amp;</SPAN> rhs<SPAN 
+            style="COLOR: #0000cc">)</SPAN> <SPAN 
+            style="COLOR: #0000cc">{</SPAN><BR>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</FONT><FONT 
+            face=新宋体><SPAN style="COLOR: #ff9900">// self-assigning is also 
+            right</SPAN><BR>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<SPAN 
+            style="COLOR: #0000cc">+</SPAN><SPAN 
+            style="COLOR: #0000cc">+</SPAN><SPAN 
+            style="COLOR: #0000cc">*</SPAN>rhs<SPAN 
+            style="COLOR: #0000cc">.</SPAN>pUse<SPAN 
+            style="COLOR: #0000cc">;</SPAN><BR>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+            decrUse<SPAN style="COLOR: #0000cc">(</SPAN><SPAN 
+            style="COLOR: #0000cc">)</SPAN><SPAN 
+            style="COLOR: #0000cc">;</SPAN><BR>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+            ptr <SPAN style="COLOR: #0000cc">=</SPAN> rhs<SPAN 
+            style="COLOR: #0000cc">.</SPAN>ptr<SPAN 
+            style="COLOR: #0000cc">;</SPAN><BR>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+            pUse <SPAN style="COLOR: #0000cc">=</SPAN> rhs<SPAN 
+            style="COLOR: #0000cc">.</SPAN>pUse<SPAN 
+            style="COLOR: #0000cc">;</SPAN><BR>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<SPAN 
+            style="COLOR: #0000ff">return</SPAN> <SPAN 
+            style="COLOR: #0000cc">*</SPAN><SPAN 
+            style="COLOR: #0000ff">this</SPAN><SPAN 
+            style="COLOR: #0000cc">;</SPAN><BR>&nbsp;&nbsp;&nbsp;&nbsp;<SPAN 
+            style="COLOR: #0000cc">}</SPAN><BR>&nbsp;&nbsp;&nbsp;&nbsp; T <SPAN 
+            style="COLOR: #0000cc">*</SPAN><SPAN 
+            style="COLOR: #0000ff">operator</SPAN><SPAN 
+            style="COLOR: #0000cc">-</SPAN><SPAN 
+            style="COLOR: #0000cc">&gt;</SPAN><SPAN 
+            style="COLOR: #0000cc">(</SPAN><SPAN style="COLOR: #0000cc">)</SPAN> 
+            <SPAN 
+            style="COLOR: #0000cc">{</SPAN><BR>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<SPAN 
+            style="COLOR: #0000ff">if</SPAN> <SPAN 
+            style="COLOR: #0000cc">(</SPAN>ptr<SPAN 
+            style="COLOR: #0000cc">)</SPAN><BR>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<SPAN 
+            style="COLOR: #0000ff">return</SPAN> ptr<SPAN 
+            style="COLOR: #0000cc">;</SPAN><BR>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<SPAN 
+            style="COLOR: #0000ff">throw</SPAN> <SPAN 
+            style="COLOR: #ff0000">std</SPAN><SPAN 
+            style="COLOR: #0000cc">:</SPAN><SPAN 
+            style="COLOR: #0000cc">:</SPAN><SPAN 
+            style="COLOR: #ff0000">runtime_error</SPAN><SPAN 
+            style="COLOR: #0000cc">(</SPAN><SPAN style="COLOR: #ff00ff">"access 
+            through NULL pointer"</SPAN><SPAN 
+            style="COLOR: #0000cc">)</SPAN><SPAN 
+            style="COLOR: #0000cc">;</SPAN><BR>&nbsp;&nbsp;&nbsp;&nbsp;<SPAN 
+            style="COLOR: #0000cc">}</SPAN><BR>&nbsp;&nbsp;&nbsp;&nbsp;<SPAN 
+            style="COLOR: #0000ff">const</SPAN> T <SPAN 
+            style="COLOR: #0000cc">*</SPAN><SPAN 
+            style="COLOR: #0000ff">operator</SPAN><SPAN 
+            style="COLOR: #0000cc">-</SPAN><SPAN 
+            style="COLOR: #0000cc">&gt;</SPAN><SPAN 
+            style="COLOR: #0000cc">(</SPAN><SPAN style="COLOR: #0000cc">)</SPAN> 
+            <SPAN style="COLOR: #0000ff">const</SPAN> <SPAN 
+            style="COLOR: #0000cc">{</SPAN> 
+            <BR>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<SPAN 
+            style="COLOR: #0000ff">if</SPAN> <SPAN 
+            style="COLOR: #0000cc">(</SPAN>ptr<SPAN 
+            style="COLOR: #0000cc">)</SPAN><BR>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<SPAN 
+            style="COLOR: #0000ff">return</SPAN> ptr<SPAN 
+            style="COLOR: #0000cc">;</SPAN><BR>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<SPAN 
+            style="COLOR: #0000ff">throw</SPAN> <SPAN 
+            style="COLOR: #ff0000">std</SPAN><SPAN 
+            style="COLOR: #0000cc">:</SPAN><SPAN 
+            style="COLOR: #0000cc">:</SPAN><SPAN 
+            style="COLOR: #ff0000">runtime_error</SPAN><SPAN 
+            style="COLOR: #0000cc">(</SPAN><SPAN style="COLOR: #ff00ff">"access 
+            through NULL pointer"</SPAN><SPAN 
+            style="COLOR: #0000cc">)</SPAN><SPAN 
+            style="COLOR: #0000cc">;</SPAN><BR>&nbsp;&nbsp;&nbsp;&nbsp;<SPAN 
+            style="COLOR: #0000cc">}</SPAN><BR>&nbsp;&nbsp;&nbsp;&nbsp; T <SPAN 
+            style="COLOR: #0000cc">&amp;</SPAN><SPAN 
+            style="COLOR: #0000ff">operator</SPAN><SPAN 
+            style="COLOR: #0000cc">*</SPAN><SPAN 
+            style="COLOR: #0000cc">(</SPAN><SPAN style="COLOR: #0000cc">)</SPAN> 
+            <SPAN 
+            style="COLOR: #0000cc">{</SPAN><BR>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<SPAN 
+            style="COLOR: #0000ff">if</SPAN> <SPAN 
+            style="COLOR: #0000cc">(</SPAN>ptr<SPAN 
+            style="COLOR: #0000cc">)</SPAN><BR>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<SPAN 
+            style="COLOR: #0000ff">return</SPAN> <SPAN 
+            style="COLOR: #0000cc">*</SPAN>ptr<SPAN 
+            style="COLOR: #0000cc">;</SPAN><BR>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<SPAN 
+            style="COLOR: #0000ff">throw</SPAN> <SPAN 
+            style="COLOR: #ff0000">std</SPAN><SPAN 
+            style="COLOR: #0000cc">:</SPAN><SPAN 
+            style="COLOR: #0000cc">:</SPAN><SPAN 
+            style="COLOR: #ff0000">runtime_error</SPAN><SPAN 
+            style="COLOR: #0000cc">(</SPAN><SPAN 
+            style="COLOR: #ff00ff">"dereference of NULL pointer"</SPAN><SPAN 
+            style="COLOR: #0000cc">)</SPAN><SPAN 
+            style="COLOR: #0000cc">;</SPAN><BR>&nbsp;&nbsp;&nbsp;&nbsp;<SPAN 
+            style="COLOR: #0000cc">}</SPAN><BR>&nbsp;&nbsp;&nbsp;&nbsp;<SPAN 
+            style="COLOR: #0000ff">const</SPAN> T <SPAN 
+            style="COLOR: #0000cc">&amp;</SPAN><SPAN 
+            style="COLOR: #0000ff">operator</SPAN><SPAN 
+            style="COLOR: #0000cc">*</SPAN><SPAN 
+            style="COLOR: #0000cc">(</SPAN><SPAN style="COLOR: #0000cc">)</SPAN> 
+            <SPAN style="COLOR: #0000ff">const</SPAN> <SPAN 
+            style="COLOR: #0000cc">{</SPAN><BR>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<SPAN 
+            style="COLOR: #0000ff">if</SPAN> <SPAN 
+            style="COLOR: #0000cc">(</SPAN>ptr<SPAN 
+            style="COLOR: #0000cc">)</SPAN><BR>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<SPAN 
+            style="COLOR: #0000ff">return</SPAN> <SPAN 
+            style="COLOR: #0000cc">*</SPAN>ptr<SPAN 
+            style="COLOR: #0000cc">;</SPAN><BR>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<SPAN 
+            style="COLOR: #0000ff">throw</SPAN> <SPAN 
+            style="COLOR: #ff0000">std</SPAN><SPAN 
+            style="COLOR: #0000cc">:</SPAN><SPAN 
+            style="COLOR: #0000cc">:</SPAN><SPAN 
+            style="COLOR: #ff0000">runtime_error</SPAN><SPAN 
+            style="COLOR: #0000cc">(</SPAN><SPAN 
+            style="COLOR: #ff00ff">"dereference of NULL pointer"</SPAN><SPAN 
+            style="COLOR: #0000cc">)</SPAN><SPAN 
+            style="COLOR: #0000cc">;</SPAN><BR>&nbsp;&nbsp;&nbsp;&nbsp;<SPAN 
+            style="COLOR: #0000cc">}</SPAN> <BR>&nbsp;&nbsp;&nbsp;&nbsp;<SPAN 
+            style="COLOR: #0000cc">~</SPAN>SmartPtr<SPAN 
+            style="COLOR: #0000cc">(</SPAN><SPAN style="COLOR: #0000cc">)</SPAN> 
+            <SPAN 
+            style="COLOR: #0000cc">{</SPAN><BR>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+            decrUse<SPAN style="COLOR: #0000cc">(</SPAN><SPAN 
+            style="COLOR: #0000cc">)</SPAN><SPAN 
+            style="COLOR: #0000cc">;</SPAN><BR><SPAN 
+            style="COLOR: #0000cc">#</SPAN><SPAN 
+            style="COLOR: #ff0000">ifdef</SPAN> 
+            TEST_SMARTPTR<BR>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<SPAN 
+            style="COLOR: #ff0000">std</SPAN><SPAN 
+            style="COLOR: #0000cc">:</SPAN><SPAN 
+            style="COLOR: #0000cc">:</SPAN><SPAN 
+            style="COLOR: #ff0000">cout</SPAN><SPAN 
+            style="COLOR: #0000cc">&lt;</SPAN><SPAN 
+            style="COLOR: #0000cc">&lt;</SPAN><SPAN 
+            style="COLOR: #ff00ff">"SmartPtr: Destructor"</SPAN><SPAN 
+            style="COLOR: #0000cc">&lt;</SPAN><SPAN 
+            style="COLOR: #0000cc">&lt;</SPAN><SPAN 
+            style="COLOR: #ff0000">std</SPAN><SPAN 
+            style="COLOR: #0000cc">:</SPAN><SPAN 
+            style="COLOR: #0000cc">:</SPAN><SPAN 
+            style="COLOR: #ff0000">endl</SPAN><SPAN 
+            style="COLOR: #0000cc">;</SPAN> </FONT><FONT face=新宋体><SPAN 
+            style="COLOR: #ff9900">// for testing</SPAN><BR><SPAN 
+            style="COLOR: #0000cc">#</SPAN><SPAN 
+            style="COLOR: #ff0000">endif</SPAN><BR>&nbsp;&nbsp;&nbsp;&nbsp;<SPAN 
+            style="COLOR: #0000cc">}</SPAN><BR>&nbsp;&nbsp;&nbsp;&nbsp;<BR><SPAN 
+            style="COLOR: #0000ff">private</SPAN><SPAN 
+            style="COLOR: #0000cc">:</SPAN><BR>&nbsp;&nbsp;&nbsp;&nbsp;<SPAN 
+            style="COLOR: #0000ff">void</SPAN> decrUse<SPAN 
+            style="COLOR: #0000cc">(</SPAN><SPAN style="COLOR: #0000cc">)</SPAN> 
+            <SPAN 
+            style="COLOR: #0000cc">{</SPAN><BR>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<SPAN 
+            style="COLOR: #0000ff">if</SPAN> <SPAN 
+            style="COLOR: #0000cc">(</SPAN><SPAN 
+            style="COLOR: #0000cc">-</SPAN><SPAN 
+            style="COLOR: #0000cc">-</SPAN><SPAN 
+            style="COLOR: #0000cc">*</SPAN>pUse <SPAN 
+            style="COLOR: #0000cc">=</SPAN><SPAN style="COLOR: #0000cc">=</SPAN> 
+            0<SPAN style="COLOR: #0000cc">)</SPAN> <SPAN 
+            style="COLOR: #0000cc">{</SPAN><BR>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<SPAN 
+            style="COLOR: #0000ff">delete</SPAN> ptr<SPAN 
+            style="COLOR: #0000cc">;</SPAN><BR>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<SPAN 
+            style="COLOR: #0000ff">delete</SPAN> pUse<SPAN 
+            style="COLOR: #0000cc">;</SPAN><BR>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<SPAN 
+            style="COLOR: #0000cc">}</SPAN><BR>&nbsp;&nbsp;&nbsp;&nbsp;<SPAN 
+            style="COLOR: #0000cc">}</SPAN><BR>&nbsp;&nbsp;&nbsp;&nbsp; T <SPAN 
+            style="COLOR: #0000cc">*</SPAN>ptr<SPAN 
+            style="COLOR: #0000cc">;</SPAN><BR>&nbsp;&nbsp;&nbsp;&nbsp;<SPAN 
+            style="COLOR: #ff0000">size_t</SPAN> <SPAN 
+            style="COLOR: #0000cc">*</SPAN>pUse<SPAN 
+            style="COLOR: #0000cc">;</SPAN><BR><SPAN 
+            style="COLOR: #0000cc">}</SPAN><SPAN 
+            style="COLOR: #0000cc">;</SPAN><BR><BR><SPAN 
+            style="COLOR: #0000ff">int</SPAN> main<SPAN 
+            style="COLOR: #0000cc">(</SPAN><SPAN 
+            style="COLOR: #0000cc">)</SPAN><BR><SPAN 
+            style="COLOR: #0000cc">{</SPAN><BR>&nbsp;&nbsp;&nbsp;&nbsp;<SPAN 
+            style="COLOR: #0000ff">try</SPAN> <SPAN 
+            style="COLOR: #0000cc">{</SPAN><BR>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+            SmartPtr<SPAN style="COLOR: #0000cc">&lt;</SPAN>Stub<SPAN 
+            style="COLOR: #0000cc">&gt;</SPAN> t<SPAN 
+            style="COLOR: #0000cc">;</SPAN><BR>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+            t<SPAN style="COLOR: #0000cc">-</SPAN><SPAN 
+            style="COLOR: #0000cc">&gt;</SPAN>print<SPAN 
+            style="COLOR: #0000cc">(</SPAN><SPAN 
+            style="COLOR: #0000cc">)</SPAN><SPAN 
+            style="COLOR: #0000cc">;</SPAN><BR>&nbsp;&nbsp;&nbsp;&nbsp;<SPAN 
+            style="COLOR: #0000cc">}</SPAN> <SPAN 
+            style="COLOR: #0000ff">catch</SPAN> <SPAN 
+            style="COLOR: #0000cc">(</SPAN><SPAN 
+            style="COLOR: #0000ff">const</SPAN> <SPAN 
+            style="COLOR: #ff0000">exception</SPAN><SPAN 
+            style="COLOR: #0000cc">&amp;</SPAN> err<SPAN 
+            style="COLOR: #0000cc">)</SPAN> <SPAN 
+            style="COLOR: #0000cc">{</SPAN><BR>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<SPAN 
+            style="COLOR: #ff0000">cout</SPAN><SPAN 
+            style="COLOR: #0000cc">&lt;</SPAN><SPAN 
+            style="COLOR: #0000cc">&lt;</SPAN>err<SPAN 
+            style="COLOR: #0000cc">.</SPAN><SPAN 
+            style="COLOR: #ff0000">what</SPAN><SPAN 
+            style="COLOR: #0000cc">(</SPAN><SPAN 
+            style="COLOR: #0000cc">)</SPAN><SPAN 
+            style="COLOR: #0000cc">&lt;</SPAN><SPAN 
+            style="COLOR: #0000cc">&lt;</SPAN><SPAN 
+            style="COLOR: #ff0000">endl</SPAN><SPAN 
+            style="COLOR: #0000cc">;</SPAN><BR>&nbsp;&nbsp;&nbsp;&nbsp;<SPAN 
+            style="COLOR: #0000cc">}</SPAN><BR>&nbsp;&nbsp;&nbsp;&nbsp; 
+            SmartPtr<SPAN style="COLOR: #0000cc">&lt;</SPAN>Stub<SPAN 
+            style="COLOR: #0000cc">&gt;</SPAN> t1<SPAN 
+            style="COLOR: #0000cc">(</SPAN><SPAN 
+            style="COLOR: #0000ff">new</SPAN> Stub<SPAN 
+            style="COLOR: #0000cc">)</SPAN><SPAN 
+            style="COLOR: #0000cc">;</SPAN><BR>&nbsp;&nbsp;&nbsp;&nbsp; 
+            SmartPtr<SPAN style="COLOR: #0000cc">&lt;</SPAN>Stub<SPAN 
+            style="COLOR: #0000cc">&gt;</SPAN> t2<SPAN 
+            style="COLOR: #0000cc">(</SPAN>t1<SPAN 
+            style="COLOR: #0000cc">)</SPAN><SPAN 
+            style="COLOR: #0000cc">;</SPAN><BR>&nbsp;&nbsp;&nbsp;&nbsp; 
+            SmartPtr<SPAN style="COLOR: #0000cc">&lt;</SPAN>Stub<SPAN 
+            style="COLOR: #0000cc">&gt;</SPAN> t3<SPAN 
+            style="COLOR: #0000cc">(</SPAN><SPAN 
+            style="COLOR: #0000ff">new</SPAN> Stub<SPAN 
+            style="COLOR: #0000cc">)</SPAN><SPAN 
+            style="COLOR: #0000cc">;</SPAN><BR>&nbsp;&nbsp;&nbsp;&nbsp; t3 <SPAN 
+            style="COLOR: #0000cc">=</SPAN> t2<SPAN 
+            style="COLOR: #0000cc">;</SPAN><BR>&nbsp;&nbsp;&nbsp;&nbsp; t1<SPAN 
+            style="COLOR: #0000cc">-</SPAN><SPAN 
+            style="COLOR: #0000cc">&gt;</SPAN>print<SPAN 
+            style="COLOR: #0000cc">(</SPAN><SPAN 
+            style="COLOR: #0000cc">)</SPAN><SPAN 
+            style="COLOR: #0000cc">;</SPAN><BR>&nbsp;&nbsp;&nbsp;&nbsp;<SPAN 
+            style="COLOR: #0000cc">(</SPAN><SPAN 
+            style="COLOR: #0000cc">*</SPAN>t3<SPAN 
+            style="COLOR: #0000cc">)</SPAN><SPAN 
+            style="COLOR: #0000cc">.</SPAN>print<SPAN 
+            style="COLOR: #0000cc">(</SPAN><SPAN 
+            style="COLOR: #0000cc">)</SPAN><SPAN 
+            style="COLOR: #0000cc">;</SPAN><BR>&nbsp;&nbsp;&nbsp;&nbsp;<BR>&nbsp;&nbsp;&nbsp;&nbsp;<SPAN 
+            style="COLOR: #0000ff">return</SPAN> 0<SPAN 
+            style="COLOR: #0000cc">;</SPAN><BR><SPAN 
+            style="COLOR: #0000cc">}</SPAN></FONT></SPAN></CODE></SPAN></CODE></P></TD></TR></TBODY></TABLE></DIV></DIV></TD></TR></TBODY></TABLE><BR>
+<DIV class=opt><A title=查看该分类中所有文章 
+href="http://hi.baidu.com/tianling_xu/blog/category/&micro;&ccedil;&Auml;&Ocirc;&frac14;&frac14;&Ecirc;&otilde;">类别：电脑技术</A> | <A 
+title=将此文章添加到百度搜藏 onclick="return addToFavor();" 
+href="http://cang.baidu.com/do/add" target=_blank>添加到搜藏</A> | 浏览(<SPAN 
+id=result></SPAN>) | <A 
+href="http://hi.baidu.com/tianling_xu/blog/item/22dd0e5506b31ac7b645aeff.html#send">评论</A>&nbsp;(0)
+<SCRIPT language=javascript>
+/*<![CDATA[*/
+var pre = [true,'vc++与YACC和LEX集成环境', 'vc++与YACC和LEX集成环境','/tianling%5Fxu/blog/item/0143a00ff84d11eeaa6457c2.html'];
+var post = [true,'SMTP验证','SMTP验证', '/tianling%5Fxu/blog/item/200050e71aee2f2ab838204b.html'];
+if(pre[0] || post[0]){
+	document.write('<div style="height:5px;line-height:5px;">&nbsp;</div><div id="in_nav">');
+	if(pre[0]){
+		document.write('上一篇：<a href="' + pre[3] + '" title="' + pre[1] + '">' +  pre[2] + '</a>&nbsp;&nbsp;&nbsp;&nbsp;');
+	}
+	if(post[0]){
+		document.write('下一篇：<a href="' + post[3] + '" title="' + post[1] + '">' +  post[2] + '</a>');
+	}
+	document.write('</div>');
+}
+/*]]>*/
+</SCRIPT>
+ </DIV>
+<DIV class=line></DIV>
+<STYLE type=text/css>#in_related_doc A {
+	TEXT-DECORATION: none
+}
+</STYLE>
+
+<DIV id=in_related_tmp></DIV>
+<SCRIPT language=javascript type=text/javascript>
+/*<![CDATA[*/
+function HI_MOD_IN_RELATED_DOC_CALLBACK(arg){
+    if(arg.length <= 1) return false;
+    var hasMore = arg[0];
+    var D=function(A,B){A[A.length]=B;}
+    if(arg.length % 2 == 0) D(arg, ["","","",""]);
+
+    var html = ['<div id="in_related_doc"><div class="tit">相关文章：</div>'];
+    D(html, '<table cellpadding="0" cellspacing="3" border="0">');
+    for(var i = 1, j = arg.length; i < j; i += 2){
+        D(html, '<tr>');
+        D(html, '<td width="15px"><a style="font-size:25px" >&#8226;</a></td><td><a href="http://hi.baidu.com/' + arg[i][3] + '/blog/item/' + arg[i][2] + '.html" target="_blank" title="' + arg[i][0] + '">' + arg[i][1] + '</a>');
+        D(html, new Array(10).join('\u3000'));
+        D(html, '</td>');
+        if(arg[i + 1][0] != "")
+            D(html, '<td width="15px"><a style="font-size:25px" >&#8226;</a></td><td><a href="http://hi.baidu.com/' + arg[i + 1][3] + '/blog/item/' + arg[i + 1][2] + '.html" target="_blank" title="' + arg[i + 1][0] + '">' + arg[i + 1][1] + '</a></td>');
+        else
+            D(html, '<td>&nbsp;</td><td>&nbsp;</td>');
+        D(html, '</tr>');
+    }
+    if(hasMore) D(html, '<tr><td colspan="4"><a target="_blank" href="/sys/search?pageno=1&type=7&sort=1&word=%D6%C7%C4%DC%D6%B8%D5%EB%B5%C4%D4%AD%C0%ED%BC%B0%CA%B5%CF%D6%B7%BD%B0%B8&item=22dd0e5506b31ac7b645aeff">更多&gt;&gt;</a></td></tr>');
+    D(html, '</table></div><div class="line">&nbsp;</div>');
+
+    var div = document.getElementById('in_related_tmp');
+    if(div){
+        div.innerHTML = html.join('');
+        while(div.firstChild){
+            div.parentNode.insertBefore(div.firstChild, div);
+        }
+        div.parentNode.removeChild(div);
+    }
+}
+
+if(RelatedDocData == -1){	// not supported xhr
+    var script = document.createElement('script');
+    script.type = 'text/javascript';
+    script.src = '/sys/search?type=8&word=%D6%C7%C4%DC%D6%B8%D5%EB%B5%C4%D4%AD%C0%ED%BC%B0%CA%B5%CF%D6%B7%BD%B0%B8&item=22dd0e5506b31ac7b645aeff&t=' + new Date().getTime();
+    document.getElementsByTagName('HEAD')[0].appendChild(script);
+}else if(RelatedDocData == null){
+	GetAndEval = true;
+}else{
+	eval(RelatedDocData);
+}
+
+/*]]>*/
+</SCRIPT>
+
+<DIV id=in_reader>
+<DIV class=tit>最近读者：</DIV>
+<SCRIPT>
+
+	var g_spAnnony=true;
+
+
+var g_read=[
+	
+["%5F%CE%DE%C3%FB%D6%D0%5F","0cd55fcedec3fbd6d05fb403","_无名中_"],
+
+{}
+];
+g_read.length=g_read.length-1;
+
+var _rh1="";
+var _rh2="";
+
+function wrreader(){
+	_rh1 += '<table width="100%" ><tr>';
+	_rh2+='<tr>';
+	if(g_spAnnony){
+		_rh1+='<td align="center" width="10%" ><img border="0" width="55" height="55" src="http://img.baidu.com/hi/img/portraitn.jpg"></td>';
+		_rh2+='<td>&nbsp;</td>';
+		if(g_read.length>0){
+			_rh1+='<td align="left" width="12%">';
+		}else{
+			_rh1+='<td align="left" width="100%">';
+		}
+		_rh1+="<a href='http://passport.baidu.com/?login&tpl=sp&tpl_reg=sp&u="+myref+"' target='_self'>登录</a>后，您就出现在这里。</td>";
+		_rh2+='<td>&nbsp;</td>'
+	}
+	if(g_read.length==0){
+		if(!g_spAnnony){
+			_rh1+='<td align=left width="100%">最近还没有登录用户看过这篇文章……</td>';
+			_rh2+='<td>&nbsp;</td>';
+		}
+	}else{
+		for(i=0,len=g_read.length;i<len;i++){
+			_rh1+='<td align="center" valign="bottom" width="10%" class="user"><a href="/'+g_read[i][0]+'" target="_blank"><img border="0" src="http://himg.baidu.com/sys/portraitn/item/'+g_read[i][1]+'.jpg"></a></td>';
+			_rh2+='<td align="center" valign="top" class="user"><a href="/'+g_read[i][0]+'" target="_blank">'+g_read[i][2]+'</a></td>';
+		}
+	}
+	_rh1+='<td width="100%"></td></tr>';
+	_rh2+='<td></td></tr></table>';
+	document.write(_rh1+_rh2);
+}
+
+wrreader();
+</SCRIPT>
+</DIV>
+<DIV class=line></DIV>
+<SCRIPT language=JavaScript>
+allkey=allkey+"f33ff91f1ad8930a314e15bc_22dd0e5506b31ac7b645aeff_";
+</SCRIPT>
+
+<DIV id=in_comment><A name=comment></A>
+<DIV class=tit>网友评论：</DIV>
+<SCRIPT>
+function writecmt(type,id,cmtname,cmturl,portraitId){
+	var html1="";
+
+	if(type==1){
+			html1="<a name='"+id+"' href='"+cmturl+"' target='_blank' title='"+cmturl+"'><img  border='0' src='http://himg.baidu.com/sys/portraitn/item/"+portraitId+".jpg'><br>"+cmtname+"</a>";
+	}else{
+		if(cmtname=="" || cmtname=="匿名网友"){
+			if(cmturl==""){
+				html1="<a name='"+id+"'>匿名网友</a>";
+			}else{
+				html1="<a name='"+id+"' href='"+cmturl+"' target='_blank' title='"+cmturl+"'>"+cmtname+"</a>";
+			}
+		}else{
+			if(cmturl==""){
+				html1="<div class='f14' style='display:inline'>网友:<a name='"+id+"'>"+cmtname+"</a></div>";
+			}else{
+				html1="<div class='f14' style='display:inline'>网友:<a name='"+id+"' href='"+cmturl+"' target='_blank' title='"+cmturl+"'>"+cmtname+"</a></div>";
+			}
+		}
+	}
+	document.write(html1);
+}
+
+</SCRIPT>
+
+<DIV id=page></DIV></DIV>
+<DIV id=in_send><A name=send></A>
+<FORM id=popFormSubmit name=form1 onsubmit="return checkcmtform()" 
+action=/tianling%5Fxu/commit method=post><INPUT type=hidden value=8 name=ct> 
+<INPUT type=hidden value=1 name=cm> <INPUT type=hidden 
+value=22dd0e5506b31ac7b645aeff name=spBlogID>
+<SCRIPT language=JavaScript>
+	document.write("<input type='hidden' name='spRefURL' value='"+window.location.href+"'>");
+</SCRIPT>
+ 
+<DIV class=tit>发表评论：</DIV>
+<TABLE cellSpacing=5 cellPadding=0 width=620 border=0>
+  <TBODY>
+  <TR>
+    <TD class=f14>姓　名：</TD>
+    <TD><INPUT id=spBlogCmtor style="WIDTH: 220px" onfocus=hidErr(1); 
+      tabIndex=1 maxLength=49 onchange="checkname('spBlogCmtor')" 
+      name=spBlogCmtor>
+      <SCRIPT>
+document.write(" &nbsp;&nbsp; <a href='http://passport.baidu.com/?reg&tpl=sp&return_method=get&skip_ok=1&u=http://hi.baidu.com/sys/reg/' target='_blank'>注册</a>");
+document.write(" | <a href='http://passport.baidu.com/?login&tpl=sp&tpl_reg=sp&u="+myref+"'>登录</a>");
+
+</SCRIPT>
+       
+      <DIV id=nmerror style="DISPLAY: none">*姓名最长为50字节</DIV></TD></TR>
+  <TR id=1_err style="DISPLAY: none">
+    <TD>&nbsp;</TD>
+    <TD>
+      <DIV class=error id=1_err_con></DIV></TD></TR>
+  <TR>
+    <TD class=f14>网址或邮箱：</TD>
+    <TD><INPUT id=spBlogCmtURL style="WIDTH: 360px" onfocus=hidErr(2); 
+      tabIndex=2 maxLength=128 onchange="checkeandu('spBlogCmtURL')" 
+      name=spBlogCmtURL> (选填)</TD>
+    <SCRIPT>
+G("spBlogCmtor").value="";
+G("spBlogCmtURL").value="";
+</SCRIPT>
+  </TR>
+  <TR id=2_err style="DISPLAY: none">
+    <TD>&nbsp;</TD>
+    <TD>
+      <DIV class=error id=2_err_con></DIV></TD></TR>
+  <TR>
+    <TD class=f14 vAlign=top>内　容：</TD>
+    <TD><TEXTAREA id=spBlogCmtText style="WIDTH: 520px; HEIGHT: 155px" onfocus=hidErr(3); tabIndex=3 name=spBlogCmtText></TEXTAREA>
+      <SCRIPT>
+G("spBlogCmtor").value=G("spBlogCmtor").defaultValue;
+G("spBlogCmtText").value="";
+</SCRIPT>
+       </TD></TR>
+  <TR id=3_err style="DISPLAY: none">
+    <TD>&nbsp;</TD>
+    <TD>
+      <DIV class=error id=3_err_con></DIV></TD></TR>
+  <TR id=vercode>
+    <TD class=f14 vAlign=top>验证码：</TD>
+    <TD vAlign=top><INPUT type=hidden 
+      value=549D7B92838E983A2D77AE2B38FC5E577FAA3A34A9576265493709052FE2CECF9F06C8B6CE3E13D9E1C4EBCA010E70DA21E9159C24085B010514A74D02789DD7 
+      name=spVcode> <INPUT id=spVerifyKey tabIndex=4 maxLength=4 size=6 
+      name=spVerifyKey autocomplete="off">请输入下图中的四位验证码，字母不区分大小写。<BR>
+      <SCRIPT language=JavaScript>
+
+			var imgsrc="http://tieba.baidu.com/cgi-bin/genimg?549D7B92838E983A2D77AE2B38FC5E577FAA3A34A9576265493709052FE2CECF9F06C8B6CE3E13D9E1C4EBCA010E70DA21E9159C24085B010514A74D02789DD7";
+			document.write("<img id='verifypic' src='"+imgsrc+"' width='120' height='40'>");
+
+			function newverifypic(){
+				document.getElementById("verifypic").src = imgsrc +"&t="+ Math.random();
+			}
+		</SCRIPT>
+      <A title=看不清左边的字符 href="javascript:newverifypic();">看不清?</A> </TD></TR>
+  <TR>
+    <TD class=f14 vAlign=top>&nbsp;</TD>
+    <TD class=f14 vAlign=top><INPUT id=btn_ok tabIndex=5 type=submit value=发表评论 name=btn_ok></TD></TR></TBODY></TABLE></FORM></DIV><BR></DIV>
+<TABLE height=8 cellSpacing=0 cellPadding=0 width="100%" border=0>
+  <TBODY>
+  <TR>
+    <TD class=modbl width=7>&nbsp;</TD>
+    <TD class=modbc>&nbsp;</TD>
+    <TD class=modbr width=7>&nbsp;</TD></TR></TBODY></TABLE></DIV></DIV></DIV></DIV>
+<SCRIPT language=javascript>
+<!--
+var hstr="/tianling%5Fxu/brwstat?key1=1";
+document.write("<script src='"+hstr+"&key2="+allkey+"'><\/script>");
+//-->
+</SCRIPT>
+<BR>
+<CENTER>
+<DIV id=ft>&copy;2008 Baidu</DIV></CENTER>
+<SCRIPT>
+if(document.getElementById("m_blog"))
+{
+	var imgarray = document.getElementById("m_blog").getElementsByTagName('img');
+	var imgw = document.getElementById("m_blog").offsetWidth;
+	imgw =imgw-40;
+	for(var i=0; i<imgarray.length; i++){
+	if(imgarray[i].className=="blogimg" && imgarray[i].width>=imgw) imgarray[i].width=imgw;
+	}
+}
+</SCRIPT>
+</CENTER><IMG style="DISPLAY: none" src=""> </BODY></HTML>

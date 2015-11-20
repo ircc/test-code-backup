@@ -1,0 +1,560 @@
+C++深度探索系列：智能指针(Smart Pointer)
+
+一、剖析C++标准库智能指针(std::auto_ptr)
+    
+    1.Do you Smart Pointer?
+    2.std::auto_ptr的设计原理
+    3.std::auto_ptr高级使用指南
+    4.你是否觉得std::auto_ptr还不够完美?
+
+二、C++条件,寻找构造更强大的智能指针(Smart Pointer)的
+    策略
+    
+    1.支持引用记数的多种设计策略
+    2.支持处理多种资源
+    3.支持Subclassing
+    4.支持多线程条件下,线程安全的多种设计策略
+    5.其它多种特殊要求下,再构造
+
+三、Generic Programming基础技术和Smart Pointer
+    1.回首处理资源中的Traits技术
+    2.回首多线程支持的设计
+
+
+四、COM实现中,Smart Pointer设计原理
+
+
+五、著名C++库(标准和非标准)中的Smart Pointer现状
+
+---------------------------------------------------------------------
+
+
+一、剖析C++标准库智能指针(std::auto_ptr)
+    
+    1.Do you Smart Pointer?
+
+      Smart Pointer,中文名：智能指针, 舶来品?
+      不可否认,资源泄露(resource leak)曾经是C++程序的一大噩梦.垃圾回收
+      机制(Garbage Collection)一时颇受注目.然而垃圾自动回收机制并不能
+      满足内存管理的即时性和可视性,往往使高傲的程序设计者感到不自在.
+      况且,C++实现没有引入这种机制.在探索中,C++程序员创造了锋利的
+      "Smart Pointer".一定程度上,解决了资源泄露问题.
+
+      也许,经常的,你会写这样的代码：
+      //x拟为class:
+      //            class x{
+      //            public:        
+      //                   int m_Idata;
+      //            public:
+      //                   x(int m_PARAMin):m_Idata(m_PARAMin){}
+      //                   void print(){ cout<<m_Idata<<endl; }
+      //            .....
+      //            }
+      //
+      void fook(){
+      x* m_PTRx = new A(m_PARAMin);
+      m_PTRx->DoSomething();     //#2
+      delete m_PTRx;
+      }
+
+      是的,这里可能没什么问题.可在复杂、N行、m_PTRclassobj所指对象生命周
+      期要求较长的情况下,你能保证你不会忘记delete m_PTRclassobj吗?生活中,
+      我们往往不应该有太多的口头保证,我们需要做些真正有用的东西.还有一个
+      更敏感的问题：异常.假如在#2方法执行期异常发生,函数执行终止,那么new
+      出的对象就会泄露.于是,你可能会说：那么就捕获异常来保证安全性好了.
+      你写这样的程式：
+
+      void fook(){
+      A* m_PTRx = new A(m_PARAMin);
+      try{
+          m_PTRx->DoSomething();
+      }
+      catch(..){
+          delete m_PTRx;
+          throw;
+      }
+      delete m_PTRx;
+      }
+      哦!天哪!想象一下,你的系统,是否会象专为捕获异常而设计的.
+
+      一天,有人给你建议:"用Smart Pointer,那很安全.".你可以这样重写你的程序：
+    
+      void fook(){
+      auto_ptr<x> m_SMPTRx(new x(m_PARAMin));
+      m_SMPTRx->DoSomething();
+      }
+
+      OK!你不太相信.不用delete吗?
+      是的.不用整天提心吊胆的问自己:"我全部delete了吗?",而且比你的delete
+      策略更安全.
+
+      然后,还有人告诉你,可以这样用呢：
+      ok1.
+      auto_ptr<x> m_SMPTR1(new x(m_PARAMin)); 
+      auto_ptr<x> m_SMPTR2(m_SMPTR1);  //#2
+      May be you can code #2 like this :
+          auto_ptr<x> m_SMPTR2;
+          m_SMPTR2 = m_SMPTR1;      
+      ok2.
+      auto_ptr<int> m_SMPTR1(new int(32));
+      
+      ok3.
+      auto_ptr<int> m_SMPTR1;
+      m_SMPTR1 = auto_ptr<int>(new int(100));
+      也可以：
+      auto_ptr<int> m_SMPTR1(auto_ptr<int>(new int(100)));
+      
+      ok4.
+      auto_ptr<x> m_SMPTR1(new x(m_PARAMin));
+      m_SMPTR1.reset(new x(m_PARAMin1));
+      
+      ok5.
+      auto_ptr<x> m_SMPTR1(new x(m_PARAMin));
+      auto_ptr<x> m_SMPTR2(m_SMPTR.release());
+      cout<<(*m_SMPTR2).m_Idata<<endl;  
+      
+      ok6.
+      auto_ptr<int> fook(){
+      return auto<int>(new int(100));
+      }
+ 
+      ok7.............and so on
+      
+      但不可这样用：
+      
+      no1.   
+      char* chrarray = new char[100];
+      strcpy(chrarray,"I am programming.");
+      auto_ptr<char*> m_SMPTRchrptr(chrarray);
+      //auto_ptr并不可帮你管理数组资源     
+       
+      no2.
+      vector<auto_ptr<x>> m_VECsmptr;
+      m_VECsmptr.push_back(auto_ptr<int>(new int(100)));
+      //auto_ptr并不适合STL内容.
+       
+      no3.
+      const auto_ptr<x> m_SMPTR1(new x(100));
+      auto_ptr<x> m_SMPTR(new x(200));
+      
+      no4.
+      x m_OBJx(300);
+      auto_ptr<x> m_SMPTR(&m_OBJx);
+      
+      no5
+      x* m_PTR = new x(100);
+      auto_ptr<x> m_SMPTR = m_pTR;
+      
+      no6..........and so on
+
+      预先提及所有权的问题,以便下面带着疑问剖析代码?
+
+      power1.
+      auto_ptr<x> m_SMPTR1(new x(100));
+      auto_ptr<x> m_SMPTR2 = m_SMPTR1;
+      m_SMPTR2->print();
+      //输出：100.
+      m_SMPTR1->print();
+      //!! 非法的.
+
+      power2.
+      auto_ptr<x> m_SMPTR(new x(100));
+      
+      auto_ptr<x> returnfun(auto_ptr<x> m_SMPTRin){
+      return m_SMPTRin;
+      }
+      
+      auto_ptr<x> = returnfun(m_SMPTR);  //#5
+
+      //在上面的#5中,我要告诉你对象所有权转移了两次.
+      //什么叫对象所有权呢?
+   
+    2. std::auto_ptr的设计原理
+       
+      上面的一片正确用法,它们在干些什么?
+            一片非法,它们犯了什么罪?
+            一片什么所有权转移,它的内部机智是什么?
+      哦!一头雾水?下面我们就来剖析其实现机制.
+      基础知识：
+              a.智能指针的关键技术：在于构造栈上对象的生命期控制
+                堆上构造的对象的生命期.因为在智能指针的内部,存储
+                着堆对象的指针,而且在构析函数中调用delete行为.
+                大致机构如下：
+                x* m_PTRx = new x(100);//#1
+                template<typename T>
+                auto_ptr{
+                private:
+                T* m_PTR;//维护指向堆对象的指针,在auto_ptr定位后     
+                ....     //它应该指向#1构造的对象,即拥有所有权.
+                ~auto(){ delete m_PTR; }
+                ....
+                }
+             b.所有权转移之说
+               上面曾有一非法的程式片段如下：
+               auto_ptr<x> m_SMPTR1(new x(100));
+               auto_ptr<x> m_SMPTR2 = m_SMPTR1;
+               m_SMPTR2->print();
+               //输出：100.
+               m_SMPTR1->print();
+               //!! 非法的.
+               按常理来说,m_SMPTR->print();怎么是非法的呢?
+               那是因为本来,m_SMPTR1维护指向new x(100)的指针,
+               可是m_SMPTR2 = m_SMPTR1;auto_ptr内部机制使得m_SMPTR1将对象的地址
+               传给m_SMPTR2,而将自己的对象指针置为0.
+               那么自然m_SMPTR->print();失败.
+               这里程序设计者要负明显的职责的.
+               那么auto_ptr为什么采取这样的策略：保证所有权的单一性.
+                                               亦保证了系统安全性.
+               如果多个有全权的auto_ptr维护一个对象,那么在你消除一个
+               auto_ptr时,将导致多个auto_ptr的潜在危险.
+//----------------------------------------------------------------------------
+智能指针 2:
+
+下面我们以SGI-STL的auto_ptr设计为样本(去掉了无关分析的宏),来剖析其原理.
+       #1  template <class _Tp> class auto_ptr {
+       #2  private:
+       #3  _Tp* _M_ptr;  //定义将维护堆对象的指针
+
+       #4  public:
+       #5  typedef _Tp element_type;  //相关类型定义
+       #6  explicit auto_ptr(_Tp* __p = 0) __STL_NOTHROW : _M_ptr(__p) {}
+       #7  auto_ptr(auto_ptr& __a) __STL_NOTHROW : _M_ptr(__a.release()) {}
+       #8  template <class _Tp1> auto_ptr(auto_ptr<_Tp1>& __a) __STL_NOTHROW
+                                                 : _M_ptr(__a.release()) {}
+           //#6、#7、#8是auto_ptr构造函数的三个版本.
+           //#6注释：传入对象的指针,构造auto_ptr.explicit关键字:禁止隐式转换.
+           //        这就是ok2正确,而no5(隐式转换)错误的原因.
+           //#7注释：拷贝构造函数.
+           //        传入auto_ptr实例,构造auto_ptr. ok1、ok3使用了这个构造式.
+           //        它是一个很关键的构造函数,在具体情况下,我们再分析
+           //#8注释：auto_ptr的模板成员,可在继承对象重载的基础上,实现特殊功能.
+           //   
+           //   举例：
+           //   class A{ public: 
+           //          virtual void fook(){cout<<"I am programming"<<endl;
+           //          /*..........*/                                   }; 
+           //   class B : public A {
+           //          virtual void fook(){ cout<<"I am working"<<endl;
+           //         /*...........*/                                  };  
+           //   auto_ptr<A> m_SMPTRa(new A(33));//实质：
+           //   auto_ptr<B> m_SMPTRb(m_SMPTRa); //基类的指针可以赋给派生类的指针          
+           //              
+           //   auto_ptr<B> m_SMPTRb(new B(44));//实质：
+           //   auto_ptr<A> m_SMPTRa(m_SMPTRb); //派生类的指针不可赋给基类的指针
+           //       
+           //   auto_ptr<A> m_SMPTRa(new B(33));  // ok!  
+           //   m_SMPTRa->fook()将调用派生类B的fook()
+           //   m_SMPTRa->A::fook()将调用基类A的fook()
+           //    
+           //   auto_ptr<B> m_SMPTRb(new A(33));  // wrong!
+           //   
+           //   
+       #9  auto_ptr& operator=(auto_ptr& __a) __STL_NOTHROW {
+       #10 if (&__a != this) { delete _M_ptr;  _M_ptr = __a.release(); }
+       #11 return *this;
+       #12 }
+         
+       #13 template <class _Tp1>
+       #14 auto_ptr& operator=(auto_ptr<_Tp1>& __a) __STL_NOTHROW {
+       #15 if (__a.get() != this->get()) { delete _M_ptr; _M_ptr = __a.release(); }
+       #16 return *this;
+       #16 }  
+          //
+          // #9~~#16 两个版本的指派函数.
+          //         delete _M_ptr; 在指派前,销毁原维护的对象.
+          //         _a.release() ; release操作,详细代码参见#20~~#23.
+          //                        用于*this获得被指派对象,
+          //                        且将原维护auto_ptr置空.
+          //     no3使用了第一种指派.
+          //     而权限转移正是_a.release()的结果.
+          
+       #17 ~auto_ptr() __STL_NOTHROW { delete _M_ptr; }
+          //构析函数.消除对象.注意这里对对象的要求!
+          
+       #17 _Tp& operator*() const __STL_NOTHROW {  return *_M_ptr; }
+       #18 _Tp* operator->() const __STL_NOTHROW { return _M_ptr;  }
+       #19 _Tp* get() const __STL_NOTHROW { return _M_ptr; }
+         //
+         //  操作符重载.
+         // #17注释：提领操作(dereference),获得对象. 见ok5用法.
+         // #18注释：成员运算符重载,返回对象指针.
+         // #19注释：普通成员函数.作用同于重载->运算符
+         //
+       #20 _Tp* release() __STL_NOTHROW {
+       #21 _Tp* __tmp = _M_ptr;
+       #22 _M_ptr = 0;
+       #23 return __tmp;                }
+         //上面已经详解      
+ 
+       #24 void reset(_Tp* __p = 0) __STL_NOTHROW {
+       #25 delete _M_ptr;
+       #26 _M_ptr = __p;                          }
+         //
+         //传入对象指针,改变auto_ptr维护的对象
+         //       且迫使auto_ptr消除原来维护的对象
+         //       见ok3用法.
+
+         // According to the C++ standard, these conversions are required.  Most
+         // present-day compilers, however, do not enforce that requirement---and, 
+         // in fact, most present-day compilers do not support the language 
+         // features that these conversions rely on.
+         
+         //下面这片段用于类型转化,目前没有任何编译器支持
+         //具体技术细节不诉.          
+
+         #ifdef __SGI_STL_USE_AUTO_PTR_CONVERSIONS
+
+      #27 private:
+      #28 template<class _Tp1> 
+      #29 struct auto_ptr_ref { _Tp1* _M_ptr; auto_ptr_ref(_Tp1* __p) : _M_ptr(__p) {}
+                             };
+
+      #30 public:
+      #31 auto_ptr(auto_ptr_ref<_Tp> __ref) __STL_NOTHROW
+                               : _M_ptr(__ref._M_ptr) {}
+      #32 template <class _Tp1> 
+      #33 operator auto_ptr_ref<_Tp1>() __STL_NOTHROW 
+      #34 { return auto_ptr_ref<_Tp>(this->release()); }
+      #35 template <class _Tp1> operator auto_ptr<_Tp1>() __STL_NOTHROW
+      #36 { return auto_ptr<_Tp1>(this->release()); }
+      #37 #endif /* __SGI_STL_USE_AUTO_PTR_CONVERSIONS */
+      #38 };
+      
+      OK!就是这样了.
+      正如上面原理介绍处叙说,
+      你需要正视两大特性：
+      1.构造栈对象的生命期控制堆上构造的对象的生命期
+      2.通过release来保证auto_ptr对对象的独权.
+      
+     在我们对源码分析的基础上,重点看看：
+     no系列错误在何处?
+     no1.
+         我们看到构析函数template<class _Tp>
+                         ~auto_ptr() _STL_NOTHROW
+                        { delete _M_ptr; }
+         所以它不能维护数组,
+         维护数组需要操作：delete[] _M_ptr;
+     no2.
+        先提部分vector和auto_ptr代码：
+        a.提auto_ptr代码
+          
+        auto_ptr(auto_ptr& __a) __STL_NOTHROW : _M_ptr(__a.release()) {}
+        
+        b.提vector代码
+          
+          Part1:
+          void push_back(const _Tp& __x) {
+          if (_M_finish != _M_end_of_storage) {
+          construct(_M_finish, __x);
+          ++_M_finish;
+          }
+          else
+         _M_insert_aux(end(), __x);
+          }
+        
+         Part2:
+         template <class _T1, class _T2>
+         inline void construct(_T1* __p,
+
+         //++++++++++++++++++++++++++++++++ 
+         //         const _T2& __value) { +
+         //++++++++++++++++++++++++++++++++
+         //  new (__p) _T1(__value);      +
+         //++++++++++++++++++++++++++++++++
+
+         }
+         
+         Part3.
+         template <class _Tp, class _Alloc>
+         void 
+         vector<_Tp, _Alloc>::_M_insert_aux
+         (iterator __position,
+
+          //++++++++++++++++++++++++++++++++ 
+          //        const _Tp& __x)       ++
+          //++++++++++++++++++++++++++++++++   
+ 
+         {
+         if (_M_finish != _M_end_of_storage) {
+         construct(_M_finish, *(_M_finish - 1));
+         ++_M_finish;
+
+         //++++++++++++++++++++++++++++++++
+         //     _Tp __x_copy = __x;       +
+         //++++++++++++++++++++++++++++++++
+
+         copy_backward(__position, _M_finish - 2, _M_finish - 1);
+         *__position = __x_copy;
+         }
+         else {
+         const size_type __old_size = size();
+         const size_type __len = __old_size != 0 ? 2 * __old_size : 1;
+         iterator __new_start = _M_allocate(__len);
+         iterator __new_finish = __new_start;
+         __STL_TRY {
+         __new_finish = uninitialized_copy
+         (_M_start, __position, __new_start);
+         construct(__new_finish, __x);
+         ++__new_finish;
+         __new_finish = uninitialized_copy
+        (__position, _M_finish, __new_finish);
+        }
+        __STL_UNWIND((destroy(__new_start,__new_finish), 
+                  _M_deallocate(__new_start,__len)));
+       destroy(begin(), end());
+       _M_deallocate(_M_start, _M_end_of_storage - _M_start);
+       _M_start = __new_start;
+       _M_finish = __new_finish;
+       _M_end_of_storage = __new_start + __len;
+       }
+       }
+
+//----------------------------------------------------------------------------
+智能指针 3:
+
+从提取的vector代码,Part1可看出,push_back的操作行为.
+       兵分两路,可是再向下看,你会发现,无一例外,都
+       通过const _Tp& 进行拷贝行为,那么从auto_ptr提出的片段就
+       派上用场了. 
+       可你知道的,auto_ptr总是坚持对对象的独权.那必须修改
+       原来维护的对象,而vector行为要求const _Tp&,这样自然会产生
+       问题.一般编译器是可以发觉这种错误的.
+
+       其实,STL所有的容器类都采用const _Tp&策略.
+  
+       //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+      + 看了sutter和Josuttis的两篇文章中,都提及：                    +
+      + STL容器不支持auto_ptr原因在于copy的对象只是获得所有权的对象, +
+      + 这种对象不符合STL的要求.可是本人总感觉即时不是真正的复制对象,+
+      + 但我用vector<auto_ptr<x> >的目的就在于维护对象,并不在乎      +
+      + 所谓的完全对象.而且我用自己写的Smart Pointer配合STL容器工作, +
+      + 很正常.那需要注意的仅仅是const问题.                          +
+      +                                                              +
+      //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+     no3.
+        这个也是auto_ptr隐含的所有权问题引起的.
+        const auto_ptr不允许修改.
+        随便提及：const对象不代表对象一点不可以改变.
+                  在两种const语义下,都有方法修改对象或对象内部指针维护的对象
+                 或其它资源.
+     no4.
+        再看auto_ptr的构析函数.
+        delete不可以消除栈上资源.
+
+     no5.
+        依赖传入对象指针的构造函数被声明为explicit,禁止隐式转换.
+
+    
+    3.auto_ptr高级使用指南
+      
+      a.类成员auto_ptr,禁止构造函数以构建"完全对象"
+        Programme1:
+        struct Structx{
+               int m_Idata;
+               char m_CHRdata;
+               /* and so on */
+        };
+        出于对象编程的理念,
+        我们将Structx打造成包裹类：
+        class StructWrapper{
+        private:
+        Structx* m_STRTxptr;
+        public:
+        StructWrapper():m_STRTxptr(new Structx){}
+        ~StructWrapper(){delete m_SMRTxptr; }
+        public:
+        void Soperator1(){ /* 针对Structx对象的特性操作 */}
+        void Soperator2(){ /* 针对Structx对象的特性操作 */}        
+        /*  and so on */
+        }; 
+        
+        Programme2:
+        class StructWrapper{
+        private:
+        auto_ptr<Structx> m_SMPTRx;
+        public:
+        StructWrapper():m_SMPTRAx(new Structx){}
+        public:
+        void Soperator1(){ /* 针对Structx对象的特性操作 */}
+        void Soperator2(){ /* 针对Structx对象的特性操作 */}        
+        /*  and so on */
+        }; 
+        
+        Programme3:
+        StructWrapper::StructWrapper(const StructWrapper& other)
+        : M_SMPTRx(new Struct(*other.m_SMPTRx)) { }
+        StructWrapper& StructWrapper::operator=(const StructWrapper &other){
+        *m_SMPTRx = *other.m_SMPTRx;
+        };
+
+        处于对构建于堆中的对象(new Structx)智能维护的需要.
+        我们将programme1改造为programme2：
+        不错,对象是可以智能维护了.
+        对于包裹类(StructWrapper)你是否会有这样的构造或指派操作：
+         StructWrapper m_SMPTRWrapper2(m_SMPTRWrapper1);
+       
+         StructWrapper mSMPTRWrapper2 = m_SMPTRWrapper1; 
+         那么请注意：
+         当你坦然的来一个：M_SMPTRWrapper1->Soperator1();的时候,
+         系统崩溃了.
+         不必惊讶,所有权还是所有权问题.
+         问一下自己：当programme2默认拷贝构造函数作用时,又调用了auto_ptr的
+         默认构造函数,那么auto_ptr所有的默认行为都遵循独权策略.对,就这样.
+         m_SMPTRWrapper1的对象所有权转移给了m_SMPTRWrapper2.
+         M_SMPTRWrapper1->Soperator1();那么操作变成了在NULL上的.
+         哦!系统不崩溃才怪.
+         那么你需要想,programme3那样利用auto_ptr的提领操作符自己的
+         构造"完全对象".
+
+       b.利用const关键字,防止不经意的权限转移
+         
+         从上面的叙述,你可看出,所有权转移到处可以酿成大祸.
+         而对于一般应用来说,独权又是很好的安全性策略.
+         那么我们就用const来修饰auto_ptr,禁止不经意的错误.
+        
+         当然上面提及：并不代表auto_ptr是不可修改的.
+         处于需要,从两种const语义,你都可实现修改.
+
+         然,你还希望在函数传入传出auto_ptr那么你可传递auto_ptr的引用,
+         那就万无一失了: void fook(const auto_ptr<x>& m_PARAMin);
+         在返回后赋予其它时,使用引用是不行的.你得用指针.
+         因为引用无论作为lvalue还是rvaluev,都会调用构造或指派函数.
+
+
+    4.你是否觉得std::auto_ptr还不够完美
+      
+      在实践中,std::auto_ptr能满足你的需求吗?           
+ 
+      Andrei Alexandrescu在一篇文章中,提及：有关Smart Pointer的技术就像
+      巫术.Smart Pointer作为C++垃圾回收机制的核心,它必须足够强大的、具有工业强度和安全性.
+      但为了可一劳永逸我们还需要披荆斩棘继续探索.
+
+      下面在需求层面上,我们思索一下我们的智能指针还需要些什么?
+ 
+        a. std::auto_ptr 能够处理数组吗?我们可以用智能指针来管理其它的资源吗?
+           譬如一个线程句柄、一个文件句柄 and so on !
+        b. 对于我们的对象真的永远实行独权政策吗?
+        c. Our 智能指针还需要在继承和虚拟层面上发挥威力 !
+        d. 往往,需要扩展Our 智能指针的功能成员函数来满足动态的需要 !
+        e. 也许,你需要的还很多.
+
+---------------------------------------------------------------
+                       [下续] 
+
+二、C++条件,寻找构造更强大的智能指针(Smart Pointer)的
+    策略
+    
+    1.支持引用记数的多种设计策略
+    2.支持处理多种资源
+    3.支持Subclassing
+    4.支持多线程条件下,线程安全的多种设计策略
+    5.其它多种特殊要求下,再构造
+
+三、Generic Programming基础技术和Smart Pointer
+    1.回首处理资源中的Traits技术
+    2.回首多线程支持的设计
+
+四、COM实现中,Smart Pointer设计原理
+
+五、著名C++库(标准和非标准)中的Smart Pointer现状

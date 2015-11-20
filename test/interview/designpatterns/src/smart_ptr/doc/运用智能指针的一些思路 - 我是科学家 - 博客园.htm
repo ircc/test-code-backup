@@ -1,0 +1,903 @@
+﻿<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<!-- saved from url=(0058)http://www.cnblogs.com/htqx/archive/2007/08/06/844793.html -->
+<HTML><HEAD id=Head><TITLE>运用智能指针的一些思路 - 我是科学家 - 博客园</TITLE>
+<META http-equiv=Content-Type content="text/html; charset=utf-8">
+<META id=metaKeywords content=运用智能指针的一些思路 name=keywords><LINK id=MainCss 
+href="运用智能指针的一些思路 - 我是科学家 - 博客园_files/style.css" type=text/css 
+rel=stylesheet><LINK id=RSSLink title=RSS 
+href="http://www.cnblogs.com/htqx/rss.aspx" type=application/rss+xml 
+rel=alternate>
+<META content="MSHTML 6.00.2900.3199" name=GENERATOR></HEAD>
+<BODY>
+<FORM id=Form1 name=Form1 onsubmit="javascript:return WebForm_OnSubmit();" 
+action=844793.html method=post>
+<DIV><INPUT id=__EVENTTARGET type=hidden name=__EVENTTARGET> <INPUT 
+id=__EVENTARGUMENT type=hidden name=__EVENTARGUMENT> <INPUT 
+id="&#13;&#10;__VIEWSTATE" type=hidden name=__VIEWSTATE> </DIV>
+<SCRIPT type=text/javascript>
+<!--
+var theForm = document.forms['Form1'];
+if (!theForm) {
+    theForm = document.Form1;
+}
+function __doPostBack(eventTarget, eventArgument) {
+    if (!theForm.onsubmit || (theForm.onsubmit() != false)) {
+        theForm.__EVENTTARGET.value = eventTarget;
+        theForm.__EVENTARGUMENT.value = eventArgument;
+        theForm.submit();
+    }
+}
+// -->
+</SCRIPT>
+
+<SCRIPT src="运用智能指针的一些思路 - 我是科学家 - 博客园_files/WebResource.axd" 
+type=text/javascript></SCRIPT>
+
+<SCRIPT language=JavaScript>
+									function ctlent(evt,id)
+											{
+												if(evt.ctrlKey && evt.keyCode == 13)
+												{	
+													try
+													{
+														TempSave(id);
+													}
+													catch(ex)
+													{
+													}
+													finally
+													{
+													    __doPostBack('AjaxHolder$PostComment$btnSubmit','')
+													}
+												}
+		
+												}</SCRIPT>
+
+<SCRIPT language=JavaScript>function SetReplyAuhor(author){document.getElementById('AjaxHolder_PostComment_tbComment').value+="@"+author+"\n";document.getElementById('AjaxHolder_PostComment_tbComment').focus();return false}</SCRIPT>
+
+<SCRIPT src="运用智能指针的一些思路 - 我是科学家 - 博客园_files/ScriptResource.axd" 
+type=text/javascript></SCRIPT>
+
+<SCRIPT 
+src="D:\Profiles\e13404\Desktop\运用智能指针的一些思路 - 我是科学家 - 博客园_files\ScriptResource(1).axd" 
+type=text/javascript></SCRIPT>
+
+<SCRIPT 
+src="D:\Profiles\e13404\Desktop\运用智能指针的一些思路 - 我是科学家 - 博客园_files\ScriptResource(2).axd" 
+type=text/javascript></SCRIPT>
+
+<SCRIPT src="运用智能指针的一些思路 - 我是科学家 - 博客园_files/js" type=text/javascript></SCRIPT>
+
+<SCRIPT type=text/javascript>
+<!--
+function WebForm_OnSubmit() {
+if (typeof(ValidatorOnSubmit) == "function" && ValidatorOnSubmit() == false) return false;
+return true;
+}
+// -->
+</SCRIPT>
+<!--done-->
+<DIV id=outer_body>
+<DIV align=center>
+<DIV id=banner><!--done-->
+<DIV class=header>
+<DIV class=headerText><A class=headermaintitle id=Header1_HeaderTitle 
+href="http://www.cnblogs.com/htqx/">我是科学家</A><BR></DIV>
+<DIV class=headerDis>..........廉价科学研究室 </DIV></DIV>
+<DIV id=left_top>
+<DIV id=mylinks><!--done--><A class=menu id=MyLinks1_HomeLink 
+href="http://www.cnblogs.com/">博客园</A>&nbsp;&nbsp;<A class=menu 
+id=MyLinks1_MyHomeLink href="http://htqx.cnblogs.com/">首页</A>&nbsp;&nbsp;<A 
+class=menu id=MyLinks1_NewPostLink 
+href="http://www.cnblogs.com/htqx/admin/EditPosts.aspx?opt=1">新随笔</A>&nbsp;&nbsp;<A 
+class=menu id=MyLinks1_NewArticleLink 
+href="http://www.cnblogs.com/EnterMyBlog.aspx?NewArticle=1">新文章</A>&nbsp;&nbsp;<A 
+class=menu id=MyLinks1_ContactLink accessKey=9 
+href="http://www.cnblogs.com/htqx/contact.aspx?id=1">联系</A>&nbsp;&nbsp;<A 
+class=menu id=MyLinks1_Admin 
+href="http://www.cnblogs.com/htqx/admin/EditPosts.aspx">管理</A>&nbsp;&nbsp;<A 
+class=menu id=MyLinks1_Syndication 
+href="http://www.cnblogs.com/htqx/rss">订阅</A>&nbsp;<A id=MyLinks1_XMLLink 
+href="http://www.cnblogs.com/htqx/rss"><IMG 
+style="BORDER-TOP-WIDTH: 0px; BORDER-LEFT-WIDTH: 0px; BORDER-BOTTOM-WIDTH: 0px; BORDER-RIGHT-WIDTH: 0px" 
+alt=订阅 src="运用智能指针的一些思路 - 我是科学家 - 博客园_files/xml.gif"></A> </DIV>
+<DIV id=mystats><!--done-->
+<DIV class=blogStats>随笔- 89&nbsp; 文章- 1&nbsp; 评论- 187&nbsp; 
+</DIV></DIV></DIV></DIV>
+<DIV id=main><!-- left starts -->
+<DIV id=left>
+<DIV id=topics>
+<SCRIPT type=text/javascript>
+//<![CDATA[
+Sys.WebForms.PageRequestManager._initialize('AjaxHolder$scriptmanager1', document.getElementById('Form1'));
+Sys.WebForms.PageRequestManager.getInstance()._updateControls(['tAjaxHolder$UpdatePanel1'], [], [], 90);
+//]]>
+</SCRIPT>
+<!--done-->
+<DIV class=post>
+<DIV class=postTitle><IMG src="运用智能指针的一些思路 - 我是科学家 - 博客园_files/fire.gif" 
+align=absMiddle border=0><A class=postTitle2 id=AjaxHolder_ctl01_TitleUrl 
+href="http://www.cnblogs.com/htqx/archive/2007/08/06/844793.html">运用智能指针的一些思路</A> 
+</DIV><BR>首先，智能指针是模拟真实指针，但是负责管理资源释放的类。<BR><BR>第一，为何要用指针，而不是直接用对象。指针是实现多态的基础，同时具备灵活绑定性的一种类型（引用也可以实现多态，但是不具备灵活绑定性。而且你不能在堆中申请一块内存，然后绑定，然后他就乖乖帮你释放，做不到这种效果，所以他并不比指针更强大，却很容易误导人写出错误的程序）。因此，用指针，主要目的就是实现多态，次要原因是需要后期绑定，比如在建立对象的时候不能准确得知这部分数据（但是或许用一个stl容器包装会是更好的设计）。<BR><BR>第二，智能指针不等于共享对象的潜台词。在对象设计中，拷贝往往是深拷贝才符合语义，那么这时候实现共享的智能指针一点意义也没有（或者作为一种优化）。但如果是常量型数据成员的设计需求，可以用共享型智能指针来提高拷贝速度。拷贝构造是静态的，不能支持多态，因此非共享型的智能指针的模板类型，就必须提供一种虚拟拷贝构造的方法。<BR><BR>第三，在c++中，构造对象即申请资源这个范式很流行，所以我认为，作为智能指针，他所负责资源管理的是在他创建的时候所同时绑定的对象。除此之外，必须通过显示的成员函数调用来改变这种绑定关系，而不能隐式，在无法看到这是一个智能指针，而不是真是指针的情况下改变这种绑定。对于这种构造则绑定的需求，其实已经在c 
+99中得到体现，一种xx指针，锁定在一个堆对象中。<BR><BR>第四，智能指针的默认构造应该是怎样的？stl容器需要默认构造函数，如果希望能与stl 
+容器配合，那么智能指针就需要设计一个默认构造函数。 
+默认清零，或者默认生成对应类型的对象。清零和真实指针比较类似，同时保证了抛出异常的准确性。用默认类型对象，可以更加接近非指针容器，同时也保留了以后修改的绑定对象可能。<BR><BR>第五，共享型智能指针作为优化手段，可以保证读共享，写入前拷贝新对象。但是共享型也有个麻烦，那就是循环计数引用的问题。比如 
+A 指向 B， B 指向 A， 你想释放A，B还有一个计数在那里，所以你不能释放， 你想释放B也是同样的道理。 但是循环引用并不多见，vb 
+就是无视这个问题，也一样没见有多少人发觉是个问题。所以实际编码中，绝少出现。 
+但是为了杜绝一切可能，我们只好认真研究解决的方法。循环引用为何少发生，那是因为循环引用发生的条件很苛刻：首先，A，B需要是一个非普通类型对象，他们的成员有智能指针，然后指向对方类型。 
+也就是说，发生是依赖对象设计的，很少有这种对象设计，所以也就很少发生。要解决这个问题，我们可以防止这样的对象设计，但是免不了的时候，首先应该清楚有多少约束条件，知道得越多，就越容易找到突破口。比如这种情况只会出现在后期绑定（至少其中一个节点）上，在创建A就绑定B，创建B就绑定A，这是不可能成立的。<BR><BR>第六，指向栈中的对象，是危险的，栈有自己独特的释放规律。因此必须保证智能指针不指向栈中的对象。当然我想这是没有办法的，这是客户的任务，而不是设计者能办到的。也就是说存在这种循环引用的对象，应该只生存在堆中。因为如此，又必须由在栈中的智能指针来管理他们，因为你用普通指针，直接删除某个对象，都是破坏了整个对象循环结构，后果是严重的。 
+栈中的智能指针决定了这个对象循环的生命周期，如果没有栈中的指针，整个对象循环就应该析构。设计者可以想办法统计这个数据，来完成对象的释放。<BR><BR><BR><BR>
+<DIV class=postDesc>posted on 2007-08-06 14:11 <A 
+href="http://htqx.cnblogs.com/">航天奇侠</A> 阅读(154) <A 
+href="http://www.cnblogs.com/htqx/archive/2007/08/06/844793.html#Post">评论(0)</A> 
+&nbsp;<A 
+href="http://www.cnblogs.com/htqx/admin/EditPosts.aspx?postid=844793">编辑</A> 
+&nbsp;<A id=lnkFavorite844793 
+onclick="Favorite(844793,'运用智能指针的一些思路','http://www.cnblogs.com/htqx/archive/2007/08/06/844793.html',this);return false" 
+href="http://www.cnblogs.com/htqx/archive/2007/08/06/844793.html#">收藏</A> 
+</DIV></DIV><IMG height=1 src="运用智能指针的一些思路 - 我是科学家 - 博客园_files/844793.jpg" 
+width=1> <!--
+<rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+xmlns:dc="http://purl.org/dc/elements/1.1/"
+xmlns:trackback="http://madskills.com/public/xml/rss/module/trackback/">
+<rdf:Description
+rdf:about="http://www.cnblogs.com/htqx/archive/2007/08/06/844793.html"
+dc:identifier="http://www.cnblogs.com/htqx/archive/2007/08/06/844793.html"
+dc:title="运用智能指针的一些思路"
+trackback:ping="http://www.cnblogs.com/htqx/services/trackbacks/844793.aspx" />
+</rdf:RDF>
+-->
+<DIV id=AjaxHolder_UpdatePanel1>
+<STYLE>TD {
+	FONT-SIZE: 12px
+}
+.commentTextBox {
+	FONT-SIZE: 13px; FONT-FAMILY: Verdana
+}
+A.blue:visited {
+	COLOR: blue
+}
+A.blue:active {
+	COLOR: blue
+}
+A.blue:link {
+	COLOR: blue
+}
+A.blue:hover {
+	COLOR: blue
+}
+</STYLE>
+<!--Beging Temp Save-->
+<STYLE>.userData {
+	BEHAVIOR: url(#default#userdata)
+}
+</STYLE>
+
+<DIV class=userData id=CommentsPersistDiv></DIV>
+<SCRIPT type=text/javascript>
+function pageLoad()
+{
+    Sys.WebForms.PageRequestManager.getInstance().add_initializeRequest(handleInitializeRequest);
+    //Sys.WebForms.PageRequestManager.getInstance().add_endRequest(handleEndRequest);
+}
+
+function handleInitializeRequest(sender, args)
+{
+    var prm = Sys.WebForms.PageRequestManager.getInstance();
+    var eid = args.get_postBackElement().id;
+    if (eid.indexOf("DeleteLink")>0) 
+    {
+       args.get_postBackElement().innerHTML = "<font color='red'>正在删除...</font>";         
+    }    
+    else if (eid.indexOf("btnSubmit")>0) 
+    {
+       document.getElementById("AjaxHolder_PostComment_ltSubmitMsg").innerHTML="正在提交...";
+       document.getElementById("AjaxHolder_PostComment_btnSubmit").disabled = true;       
+    }   
+    else if(eid.indexOf("refreshList")>0)
+    {
+        document.getElementById("AjaxHolder_PostComment_refreshList").innerHTML="<font color='red'>正在刷新...</font>";
+    }
+   
+}	
+
+function TempSave(ElementID)
+{
+	try
+	{
+	CommentsPersistDiv.setAttribute("CommentContent",document.getElementById(ElementID).value);
+	CommentsPersistDiv.save("CommentXMLStore");
+	}
+	catch(ex)
+	{
+	}
+	
+}
+function Restore(ElementID)
+{
+	CommentsPersistDiv.load("CommentXMLStore");
+	document.getElementById(ElementID).value=CommentsPersistDiv.getAttribute("CommentContent");
+}	
+			
+			
+</SCRIPT>
+<!--Ene TempSave-->
+<DIV id=divRefreshComments 
+style="FONT-SIZE: 12px; MARGIN-BOTTOM: 5px; MARGIN-RIGHT: 10px; TEXT-ALIGN: right"><A 
+id=AjaxHolder_PostComment_refreshList 
+href="javascript:__doPostBack('AjaxHolder$PostComment$refreshList','')">刷新评论列表</A>&nbsp;&nbsp;</DIV>
+<DIV class=commentform><SPAN id=AjaxHolder_PostComment_ltSubmitMsg 
+style="COLOR: red"></SPAN><BR><A name=Feedback></A>
+<TABLE cellSpacing=1 cellPadding=1 border=0>
+  <TBODY>
+  <TR>
+    <TD width=75></TD>
+    <TD></TD>
+    <TD></TD></TR>
+  <TR>
+    <TD width=55>标题</TD>
+    <TD><INPUT class=commenttb id=AjaxHolder_PostComment_tbTitle 
+      style="WIDTH: 320px" value="re: 运用智能指针的一些思路" 
+      name=AjaxHolder$PostComment$tbTitle></TD>
+    <TD><SPAN id=AjaxHolder_PostComment_RequiredFieldValidator1 
+      style="VISIBILITY: hidden; COLOR: red">请输入标题</SPAN></TD></TR>
+  <TR>
+    <TD>姓名</TD>
+    <TD><INPUT class=commenttb id=AjaxHolder_PostComment_tbName 
+      style="WIDTH: 320px" name=AjaxHolder$PostComment$tbName></TD>
+    <TD><SPAN id=AjaxHolder_PostComment_RequiredFieldValidator2 
+      style="VISIBILITY: hidden; COLOR: red">请输入你的姓名</SPAN></TD></TR>
+  <TR>
+    <TD>主页</TD>
+    <TD><INPUT class=commenttb id=AjaxHolder_PostComment_tbUrl 
+      style="WIDTH: 320px" name=AjaxHolder$PostComment$tbUrl></TD>
+    <TD><FONT face=宋体></FONT></TD></TR>
+  <TR id=AjaxHolder_PostComment_trEmail>
+    <TD>Email</TD>
+    <TD><INPUT class=commenttb id=AjaxHolder_PostComment_tbEmail 
+      style="WIDTH: 200px" name=AjaxHolder$PostComment$tbEmail>(只有博主才能看到)<SPAN 
+      id=AjaxHolder_PostComment_revContactMail 
+      style="VISIBILITY: hidden; COLOR: red">邮件地址无效</SPAN></TD>
+    <TD></TD></TR>
+  <TR>
+    <TD align=left colSpan=3>
+      <TABLE class=CommentForm id=AjaxHolder_PostComment_tbCaptchaImage 
+      cellSpacing=0 cellPadding=0 border=0>
+        <TBODY>
+        <TR>
+          <TD colSpan=3><SPAN 
+            id=AjaxHolder_PostComment_Requiredfieldvalidator4 
+            style="DISPLAY: none; COLOR: red">请输入验证码</SPAN> <SPAN 
+            id=AjaxHolder_PostComment_lblImage 
+            style="FONT-WEIGHT: bold; COLOR: red"></SPAN></TD></TR>
+        <TR>
+          <TD width=78>验证码</TD>
+          <TD><INPUT id=AjaxHolder_PostComment_CodeNumberTextBox 
+            name=AjaxHolder$PostComment$CodeNumberTextBox>*&nbsp;&nbsp;<IMG 
+            src="运用智能指针的一些思路 - 我是科学家 - 博客园_files/JpegImage.jpg"></TD>
+          <TD align=left></TD></TR></TBODY></TABLE></TD></TR>
+  <TR>
+    <TD colSpan=3>内容(请不要发表任何与政治相关的内容) <SPAN 
+      id=AjaxHolder_PostComment_RequiredFieldValidator3 
+      style="VISIBILITY: hidden; COLOR: red">请输入评论内容</SPAN><BR><TEXTAREA class=commentTextBox id=AjaxHolder_PostComment_tbComment onkeydown="ctlent(event,'AjaxHolder_PostComment_tbComment')" style="WIDTH: 480px; HEIGHT: 220px" name=AjaxHolder$PostComment$tbComment rows=10 cols=50></TEXTAREA></TD></TR>
+  <TR>
+    <TD colSpan=3><SPAN id=AjaxHolder_PostComment_Message 
+      style="COLOR: red"></SPAN></TD>
+  <TR>
+    <TD colSpan=3><INPUT id=AjaxHolder_PostComment_chkRemember tabIndex=-1 
+      type=checkbox CHECKED name=AjaxHolder$PostComment$chkRemember><LABEL 
+      for=AjaxHolder_PostComment_chkRemember>Remember Me?</LABEL></TD></TR>
+  <TR>
+    <TD height=23><INPUT class=commentButton id=AjaxHolder_PostComment_btnSubmit onclick="TempSave('AjaxHolder_PostComment_tbComment');WebForm_DoPostBackWithOptions(new WebForm_PostBackOptions(&quot;AjaxHolder$PostComment$btnSubmit&quot;, &quot;&quot;, true, &quot;&quot;, &quot;&quot;, false, false))" type=submit value=提交 name=AjaxHolder$PostComment$btnSubmit> 
+    </TD>
+    <TD colSpan=2 height=23>&nbsp; <A id=AjaxHolder_PostComment_lnkLogin 
+      href="http://www.cnblogs.com/login.aspx?ReturnURL=http://www.cnblogs.com/htqx/archive/2007/08/06/844793.html&amp;SourceURL=/htqx/archive/2007/08/06/844793.html">登录</A>&nbsp;&nbsp;<A 
+      id=AjaxHolder_PostComment_linkLoginComment 
+      onclick="if(document.getElementById('AjaxHolder_PostComment_tbComment').value != '') return confirm('未提交的评论内容将会丢失, 你真的要进入高级评论吗?');" 
+      href="http://www.cnblogs.com/htqx/archive/2007/08/06/844793.html?login=1#Post">使用高级评论</A>&nbsp;&nbsp;<A 
+      href="http://www.cnblogs.com/RequireRegister.aspx">新用户注册</A>&nbsp;&nbsp;<A 
+      href="http://www.cnblogs.com/htqx/archive/2007/08/06/844793.html#Top">返回页首</A>&nbsp;&nbsp;<A 
+      id=AjaxHolder_PostComment_lbRestore 
+      onclick="Restore('AjaxHolder_PostComment_tbComment'); return false;" 
+      href="http://www.cnblogs.com/htqx/archive/2007/08/06/844793.html#Post">恢复上次提交</A>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+    </TD></TR>
+  <TR>
+    <TD colSpan=3><LABEL class=CtrlEnter>[使用Ctrl+Enter键可以直接提交]</LABEL></TD></TR>
+  <TR>
+    <TD colSpan=3></TD></TR>
+  <TR>
+    <TD colSpan=3 height=5>&nbsp;</TD></TR>
+  <TR>
+    <TD colSpan=3 height=5></TD></TR>
+  <TR>
+    <TD colSpan=3 height=5>
+      <DIV style="MARGIN-TOP: 3px"><A 
+      href="http://www.cnblogs.com/">博客园首页</A>&nbsp;&nbsp;<A 
+      href="http://space.cnblogs.com/group.htm">小组</A>&nbsp;&nbsp;<A 
+      href="http://space.cnblogs.com/q/">博问</A>&nbsp;&nbsp;<A 
+      href="http://space.cnblogs.com/ing">闪存</A>&nbsp;&nbsp;<A 
+      href="http://news.cnblogs.com/">新闻频道</A>&nbsp;&nbsp;<A 
+      href="http://job.cnblogs.com/">招聘频道</A>&nbsp;&nbsp;<A 
+      href="http://www.cnblogs.com/topic.html">专题</A> </DIV></TD></TR>
+  <TR>
+    <TD colSpan=3 height=5>&nbsp;</TD></TR>
+  <TR>
+    <TD colSpan=3 height=5>
+      <SCRIPT type=text/javascript><!--
+google_ad_client = "pub-4210569241504288";
+google_ad_width = 468;
+google_ad_height = 60;
+google_ad_format = "468x60_as";
+google_ad_type = "text";
+google_ad_channel ="";
+google_color_link = "6699CC";
+//--></SCRIPT>
+
+      <SCRIPT src="运用智能指针的一些思路 - 我是科学家 - 博客园_files/show_ads.js" 
+      type=text/javascript>
+</SCRIPT>
+    </TD></TR></TBODY></TABLE></DIV>
+<DIV id=AjaxHolder_PostComment_ValidationSummary1 
+style="DISPLAY: none; COLOR: red"></DIV>
+<DIV style="DISPLAY: none">
+<DIV id=csAPI></DIV>
+<SCRIPT type=text/javascript>
+var csProviderUUID = 'F98A9128-131B-4737-B1B4-E10572994516';
+var csAnchorId = 'csAPI';
+var csMode = 'none';
+var csResultsTitle = '您可能还对以下内容感兴趣';
+var csMaxNum = 6;
+var csDisplayType = 'H';
+var csStylesheetUrl = '';
+var csExclude = false;	
+var csEncoding = 'gb2312';
+var csImageHeight = '80';
+var csImageWidth = '80';
+var csExcludeResultItems = '';	
+var csItemId = '844793';	
+var csThumbnailUrl = '';	
+var csItemUrl = 'http://www.cnblogs.com/htqx/archive/2007/08/06/844793.html';
+var csItemTitle = '运用智能指针的一些思路';
+var csItemDesc = '';
+var csContentCategory = '';
+var csItemType = '';
+var csAuthorId = '11207';
+var csPostTime = '2007-08-06 14:11';	
+var csTags = '';	
+var akScript = document.createElement('script');
+akScript.setAttribute('src','http://www.ak39.com/api/recommend_v.js');
+document.getElementsByTagName('head')[0].appendChild(akScript);
+</SCRIPT>
+</DIV></DIV>
+<SCRIPT language=javascript>
+
+function GetQuote(id)
+{
+    //www.cnblogs.com.ICommentService.GetCommentText(id,SetQuote);
+    BlogServer.WebService.AjaxWS.GetComment(id,SetQuote);
+}
+
+ function SetQuote(result)
+{
+    document.getElementById('AjaxHolder_PostComment_tbComment').value += ("--引用--------------------------------------------------\n"+result+"\n--------------------------------------------------------\n");
+    document.getElementById('AjaxHolder_PostComment_tbComment').focus(); 
+}
+
+function Favorite(entryID,title,url,element)
+{
+    document.getElementById(element.id).innerHTML = "<span style='color:red'>正在收藏...</span>";
+    BlogServer.WebService.AjaxWS.AddToFavorites(entryID,title,url,OnFavoriteSuccess);
+    document.getElementById(element.id).removeAttribute("href");
+    document.getElementById(element.id).removeAttribute("onclick");
+}
+
+function OnFavoriteSuccess(result)
+{
+    if(result == "请先登录")
+    {
+        window.location.href = "../../../../../login.aspx?ReturnUrl=" + window.location.href;
+    }
+    else
+    {
+        var returnstr = result.split(",");
+        var id = "lnkFavorite"+returnstr[0];
+        document.getElementById(id).innerHTML = "<span style='color:red'>" + returnstr[1] + "</span>";
+    }
+}
+</SCRIPT>
+</DIV><BR><BR><BR></DIV><!-- left ends --><!-- right starts -->
+<DIV id=right><!-- 右侧工具部分 -->
+<DIV id=right_content><!--done-->
+<H1 class=listtitle>公告</H1>
+<DIV class=newsItem><IMG height=280 alt="" hspace=5 
+src="运用智能指针的一些思路 - 我是科学家 - 博客园_files/net.png" width=170 align=bottom> 
+&nbsp;&nbsp;&nbsp;&nbsp; .net在我掌玩之中<IMG height=20 alt="" 
+src="运用智能指针的一些思路 - 我是科学家 - 博客园_files/shifty.gif" width=20 border=0> <BR><BR><A 
+href="http://creativecommons.org/licenses/by/3.0/" rel=license><IMG 
+style="BORDER-TOP-WIDTH: 0px; BORDER-LEFT-WIDTH: 0px; BORDER-BOTTOM-WIDTH: 0px; BORDER-RIGHT-WIDTH: 0px" 
+alt="Creative Commons License" 
+src="运用智能指针的一些思路 - 我是科学家 - 博客园_files/88x31.png"></A><BR>本作品采用<A 
+href="http://creativecommons.org/licenses/by/3.0/" rel=license>知识共享署名 3.0 
+许可协议</A>进行许可。 </DIV>
+<DIV id=calendar>
+<TABLE class=Cal id=Calendar1_entryCal title=Calendar 
+style="BORDER-RIGHT: 1px solid; BORDER-TOP: 1px solid; BORDER-LEFT: 1px solid; BORDER-BOTTOM: 1px solid; BORDER-COLLAPSE: collapse" 
+cellSpacing=0 cellPadding=0 border=0>
+  <TBODY>
+  <TR>
+    <TD style="BACKGROUND-COLOR: silver" colSpan=7>
+      <TABLE class=CalTitle style="WIDTH: 100%; BORDER-COLLAPSE: collapse" 
+      cellSpacing=0 border=0>
+        <TBODY>
+        <TR>
+          <TD class=CalNextPrev style="WIDTH: 15%"><A 
+            title="Go to the previous month" style="COLOR: black" 
+            href="javascript:__doPostBack('Calendar1$entryCal','V2738')">&lt;</A></TD>
+          <TD style="WIDTH: 70%" align=middle>2007年8月</TD>
+          <TD class=CalNextPrev style="WIDTH: 15%" align=right><A 
+            title="Go to the next month" style="COLOR: black" 
+            href="javascript:__doPostBack('Calendar1$entryCal','V2800')">&gt;</A></TD></TR></TBODY></TABLE></TD></TR>
+  <TR>
+    <TH class=CalDayHeader scope=col align=middle abbr=日>日</TH>
+    <TH class=CalDayHeader scope=col align=middle abbr=一>一</TH>
+    <TH class=CalDayHeader scope=col align=middle abbr=二>二</TH>
+    <TH class=CalDayHeader scope=col align=middle abbr=三>三</TH>
+    <TH class=CalDayHeader scope=col align=middle abbr=四>四</TH>
+    <TH class=CalDayHeader scope=col align=middle abbr=五>五</TH>
+    <TH class=CalDayHeader scope=col align=middle abbr=六>六</TH></TR>
+  <TR>
+    <TD class=CalOtherMonthDay style="WIDTH: 14%" align=middle>29</TD>
+    <TD class=CalOtherMonthDay style="WIDTH: 14%" align=middle>30</TD>
+    <TD class=CalOtherMonthDay style="WIDTH: 14%" align=middle>31</TD>
+    <TD style="WIDTH: 14%" align=middle>1</TD>
+    <TD style="WIDTH: 14%" align=middle>2</TD>
+    <TD style="WIDTH: 14%" align=middle>3</TD>
+    <TD class=CalWeekendDay style="WIDTH: 14%" align=middle>4</TD></TR>
+  <TR>
+    <TD class=CalWeekendDay style="WIDTH: 14%" align=middle><A 
+      href="http://www.cnblogs.com/htqx/archive/2007/08/05.html"><U>5</U></A></TD>
+    <TD style="WIDTH: 14%" align=middle><A 
+      href="http://www.cnblogs.com/htqx/archive/2007/08/06.html"><U>6</U></A></TD>
+    <TD style="WIDTH: 14%" align=middle><A 
+      href="http://www.cnblogs.com/htqx/archive/2007/08/07.html"><U>7</U></A></TD>
+    <TD style="WIDTH: 14%" align=middle>8</TD>
+    <TD style="WIDTH: 14%" align=middle>9</TD>
+    <TD style="WIDTH: 14%" align=middle><A 
+      href="http://www.cnblogs.com/htqx/archive/2007/08/10.html"><U>10</U></A></TD>
+    <TD class=CalWeekendDay style="WIDTH: 14%" align=middle>11</TD></TR>
+  <TR>
+    <TD class=CalWeekendDay style="WIDTH: 14%" align=middle>12</TD>
+    <TD style="WIDTH: 14%" align=middle>13</TD>
+    <TD style="WIDTH: 14%" align=middle>14</TD>
+    <TD style="WIDTH: 14%" align=middle>15</TD>
+    <TD style="WIDTH: 14%" align=middle>16</TD>
+    <TD style="WIDTH: 14%" align=middle><A 
+      href="http://www.cnblogs.com/htqx/archive/2007/08/17.html"><U>17</U></A></TD>
+    <TD class=CalWeekendDay style="WIDTH: 14%" align=middle>18</TD></TR>
+  <TR>
+    <TD class=CalWeekendDay style="WIDTH: 14%" align=middle>19</TD>
+    <TD style="WIDTH: 14%" align=middle>20</TD>
+    <TD style="WIDTH: 14%" align=middle>21</TD>
+    <TD style="WIDTH: 14%" align=middle>22</TD>
+    <TD style="WIDTH: 14%" align=middle>23</TD>
+    <TD style="WIDTH: 14%" align=middle>24</TD>
+    <TD class=CalWeekendDay style="WIDTH: 14%" align=middle>25</TD></TR>
+  <TR>
+    <TD class=CalWeekendDay style="WIDTH: 14%" align=middle>26</TD>
+    <TD style="WIDTH: 14%" align=middle>27</TD>
+    <TD style="WIDTH: 14%" align=middle>28</TD>
+    <TD style="WIDTH: 14%" align=middle>29</TD>
+    <TD style="WIDTH: 14%" align=middle>30</TD>
+    <TD style="WIDTH: 14%" align=middle>31</TD>
+    <TD class=CalOtherMonthDay style="WIDTH: 14%" align=middle>1</TD></TR>
+  <TR>
+    <TD class=CalOtherMonthDay style="WIDTH: 14%" align=middle>2</TD>
+    <TD class=CalOtherMonthDay style="WIDTH: 14%" align=middle>3</TD>
+    <TD class=CalOtherMonthDay style="WIDTH: 14%" align=middle>4</TD>
+    <TD class=CalOtherMonthDay style="WIDTH: 14%" align=middle>5</TD>
+    <TD class=CalOtherMonthDay style="WIDTH: 14%" align=middle>6</TD>
+    <TD class=CalOtherMonthDay style="WIDTH: 14%" align=middle>7</TD>
+    <TD class=CalOtherMonthDay style="WIDTH: 14%" 
+align=middle>8</TD></TR></TBODY></TABLE></DIV>
+<DIV id=leftcontentcontainer>
+<H3>常用链接</H3>
+<UL>
+  <LI><A id=SingleColumn1_ctl00_repeaterLinks_ctl01_lnkLinkItem 
+  href="http://www.cnblogs.com/htqx/MyPosts.html">我的随笔</A> 
+  <LI><A id=SingleColumn1_ctl00_repeaterLinks_ctl02_lnkLinkItem 
+  href="http://www.cnblogs.com/htqx/MyComments.html">我的评论</A> 
+  <LI><A id=SingleColumn1_ctl00_repeaterLinks_ctl03_lnkLinkItem 
+  href="http://www.cnblogs.com/htqx/OtherPosts.html">我的参与</A> 
+  <LI><A id=SingleColumn1_ctl00_repeaterLinks_ctl04_lnkLinkItem 
+  href="http://www.cnblogs.com/htqx/RecentComments.html">最新评论</A> </LI></UL>
+<H3>留言簿<SPAN style="FONT-WEIGHT: normal; FONT-SIZE: 11px">(9)</SPAN></H3>
+<UL>
+  <LI><A id=SingleColumn1_ctl01_lnkMessages 
+  href="http://www.cnblogs.com/htqx/Contact.aspx?id=1">给我留言</A> 
+  <LI><A id=SingleColumn1_ctl01_lnkPublicMsgView 
+  href="http://www.cnblogs.com/htqx/default.aspx?opt=msg">查看公开留言</A> 
+  <LI><A id=SingleColumn1_ctl01_lnkPrivateMsgView 
+  href="http://www.cnblogs.com/htqx/admin/MyMessages.aspx">查看私人留言</A> </LI></UL>
+<H3>我参与的团队</H3>
+<DIV class=RecentComment>
+<UL style="WORD-BREAK: break-all">
+  <LI><A id=SingleColumn1_ctl02_TeamList_ctl01_lnkTeam 
+  href="http://www.cnblogs.com/team/spidergame.html">蜘蛛游戏社团(0/190)</A> 
+</LI></UL></DIV><!--done-->
+<H1 class=catListTitle>随笔分类</H1>
+<UL class=catList>
+  <LI class=catListItem><A class=listitem 
+  id=SingleColumn1_Categories_CatList_ctl00_LinkList_ctl01_Link 
+  href="http://www.cnblogs.com/htqx/category/105251.html">Ogre 引擎教程(1)</A><A 
+  class=listitem 
+  id=SingleColumn1_Categories_CatList_ctl00_LinkList_ctl01_RssLink 
+  title="Subscribe to Ogre 引擎教程(1)" 
+  href="http://www.cnblogs.com/htqx/category/105251.html/rss"><IMG 
+  title="Subscribe to Ogre 引擎教程(1)" 
+  style="BORDER-TOP-WIDTH: 0px; BORDER-LEFT-WIDTH: 0px; BORDER-BOTTOM-WIDTH: 0px; BORDER-RIGHT-WIDTH: 0px" 
+  src="D:\Profiles\e13404\Desktop\运用智能指针的一些思路 - 我是科学家 - 博客园_files\xml(1).gif"></A> 
+
+  <LI class=catListItem><A class=listitem 
+  id=SingleColumn1_Categories_CatList_ctl00_LinkList_ctl02_Link 
+  href="http://www.cnblogs.com/htqx/category/112838.html">网摘(12)</A><A 
+  class=listitem 
+  id=SingleColumn1_Categories_CatList_ctl00_LinkList_ctl02_RssLink 
+  title="Subscribe to 网摘(12)" 
+  href="http://www.cnblogs.com/htqx/category/112838.html/rss"><IMG 
+  title="Subscribe to 网摘(12)" 
+  style="BORDER-TOP-WIDTH: 0px; BORDER-LEFT-WIDTH: 0px; BORDER-BOTTOM-WIDTH: 0px; BORDER-RIGHT-WIDTH: 0px" 
+  src="D:\Profiles\e13404\Desktop\运用智能指针的一些思路 - 我是科学家 - 博客园_files\xml(1).gif"></A> 
+
+  <LI class=catListItem><A class=listitem 
+  id=SingleColumn1_Categories_CatList_ctl00_LinkList_ctl03_Link 
+  href="http://www.cnblogs.com/htqx/category/111389.html">游戏开发C++教程(2)</A><A 
+  class=listitem 
+  id=SingleColumn1_Categories_CatList_ctl00_LinkList_ctl03_RssLink 
+  title="Subscribe to 游戏开发C++教程(2)" 
+  href="http://www.cnblogs.com/htqx/category/111389.html/rss"><IMG 
+  title="Subscribe to 游戏开发C++教程(2)" 
+  style="BORDER-TOP-WIDTH: 0px; BORDER-LEFT-WIDTH: 0px; BORDER-BOTTOM-WIDTH: 0px; BORDER-RIGHT-WIDTH: 0px" 
+  src="D:\Profiles\e13404\Desktop\运用智能指针的一些思路 - 我是科学家 - 博客园_files\xml(1).gif"></A> 
+
+  <LI class=catListItem><A class=listitem 
+  id=SingleColumn1_Categories_CatList_ctl00_LinkList_ctl04_Link 
+  href="http://www.cnblogs.com/htqx/category/43497.html">原创学习教程(11)</A><A 
+  class=listitem 
+  id=SingleColumn1_Categories_CatList_ctl00_LinkList_ctl04_RssLink 
+  title="Subscribe to 原创学习教程(11)" 
+  href="http://www.cnblogs.com/htqx/category/43497.html/rss"><IMG 
+  title="Subscribe to 原创学习教程(11)" 
+  style="BORDER-TOP-WIDTH: 0px; BORDER-LEFT-WIDTH: 0px; BORDER-BOTTOM-WIDTH: 0px; BORDER-RIGHT-WIDTH: 0px" 
+  src="D:\Profiles\e13404\Desktop\运用智能指针的一些思路 - 我是科学家 - 博客园_files\xml(1).gif"></A> 
+  </LI></UL>
+<H1 class=catListTitle>随笔档案</H1>
+<UL class=catList>
+  <LI class=catListItem><A class=listitem 
+  id=SingleColumn1_Categories_CatList_ctl01_LinkList_ctl01_Link 
+  href="http://www.cnblogs.com/htqx/archive/2008/01.html">2008年1月 (8)</A> 
+  <LI class=catListItem><A class=listitem 
+  id=SingleColumn1_Categories_CatList_ctl01_LinkList_ctl02_Link 
+  href="http://www.cnblogs.com/htqx/archive/2007/12.html">2007年12月 (5)</A> 
+  <LI class=catListItem><A class=listitem 
+  id=SingleColumn1_Categories_CatList_ctl01_LinkList_ctl03_Link 
+  href="http://www.cnblogs.com/htqx/archive/2007/11.html">2007年11月 (12)</A> 
+  <LI class=catListItem><A class=listitem 
+  id=SingleColumn1_Categories_CatList_ctl01_LinkList_ctl04_Link 
+  href="http://www.cnblogs.com/htqx/archive/2007/10.html">2007年10月 (5)</A> 
+  <LI class=catListItem><A class=listitem 
+  id=SingleColumn1_Categories_CatList_ctl01_LinkList_ctl05_Link 
+  href="http://www.cnblogs.com/htqx/archive/2007/09.html">2007年9月 (4)</A> 
+  <LI class=catListItem><A class=listitem 
+  id=SingleColumn1_Categories_CatList_ctl01_LinkList_ctl06_Link 
+  href="http://www.cnblogs.com/htqx/archive/2007/08.html">2007年8月 (5)</A> 
+  <LI class=catListItem><A class=listitem 
+  id=SingleColumn1_Categories_CatList_ctl01_LinkList_ctl07_Link 
+  href="http://www.cnblogs.com/htqx/archive/2007/07.html">2007年7月 (2)</A> 
+  <LI class=catListItem><A class=listitem 
+  id=SingleColumn1_Categories_CatList_ctl01_LinkList_ctl08_Link 
+  href="http://www.cnblogs.com/htqx/archive/2007/06.html">2007年6月 (4)</A> 
+  <LI class=catListItem><A class=listitem 
+  id=SingleColumn1_Categories_CatList_ctl01_LinkList_ctl09_Link 
+  href="http://www.cnblogs.com/htqx/archive/2007/05.html">2007年5月 (5)</A> 
+  <LI class=catListItem><A class=listitem 
+  id=SingleColumn1_Categories_CatList_ctl01_LinkList_ctl10_Link 
+  href="http://www.cnblogs.com/htqx/archive/2007/04.html">2007年4月 (1)</A> 
+  <LI class=catListItem><A class=listitem 
+  id=SingleColumn1_Categories_CatList_ctl01_LinkList_ctl11_Link 
+  href="http://www.cnblogs.com/htqx/archive/2007/03.html">2007年3月 (1)</A> 
+  <LI class=catListItem><A class=listitem 
+  id=SingleColumn1_Categories_CatList_ctl01_LinkList_ctl12_Link 
+  href="http://www.cnblogs.com/htqx/archive/2007/02.html">2007年2月 (2)</A> 
+  <LI class=catListItem><A class=listitem 
+  id=SingleColumn1_Categories_CatList_ctl01_LinkList_ctl13_Link 
+  href="http://www.cnblogs.com/htqx/archive/2007/01.html">2007年1月 (1)</A> 
+  <LI class=catListItem><A class=listitem 
+  id=SingleColumn1_Categories_CatList_ctl01_LinkList_ctl14_Link 
+  href="http://www.cnblogs.com/htqx/archive/2006/12.html">2006年12月 (2)</A> 
+  <LI class=catListItem><A class=listitem 
+  id=SingleColumn1_Categories_CatList_ctl01_LinkList_ctl15_Link 
+  href="http://www.cnblogs.com/htqx/archive/2006/11.html">2006年11月 (5)</A> 
+  <LI class=catListItem><A class=listitem 
+  id=SingleColumn1_Categories_CatList_ctl01_LinkList_ctl16_Link 
+  href="http://www.cnblogs.com/htqx/archive/2006/10.html">2006年10月 (1)</A> 
+  <LI class=catListItem><A class=listitem 
+  id=SingleColumn1_Categories_CatList_ctl01_LinkList_ctl17_Link 
+  href="http://www.cnblogs.com/htqx/archive/2006/05.html">2006年5月 (1)</A> 
+  <LI class=catListItem><A class=listitem 
+  id=SingleColumn1_Categories_CatList_ctl01_LinkList_ctl18_Link 
+  href="http://www.cnblogs.com/htqx/archive/2006/02.html">2006年2月 (1)</A> 
+  <LI class=catListItem><A class=listitem 
+  id=SingleColumn1_Categories_CatList_ctl01_LinkList_ctl19_Link 
+  href="http://www.cnblogs.com/htqx/archive/2006/01.html">2006年1月 (1)</A> 
+  <LI class=catListItem><A class=listitem 
+  id=SingleColumn1_Categories_CatList_ctl01_LinkList_ctl20_Link 
+  href="http://www.cnblogs.com/htqx/archive/2005/12.html">2005年12月 (5)</A> 
+  <LI class=catListItem><A class=listitem 
+  id=SingleColumn1_Categories_CatList_ctl01_LinkList_ctl21_Link 
+  href="http://www.cnblogs.com/htqx/archive/2005/09.html">2005年9月 (1)</A> 
+  <LI class=catListItem><A class=listitem 
+  id=SingleColumn1_Categories_CatList_ctl01_LinkList_ctl22_Link 
+  href="http://www.cnblogs.com/htqx/archive/2005/08.html">2005年8月 (2)</A> 
+  <LI class=catListItem><A class=listitem 
+  id=SingleColumn1_Categories_CatList_ctl01_LinkList_ctl23_Link 
+  href="http://www.cnblogs.com/htqx/archive/2005/07.html">2005年7月 (3)</A> 
+  <LI class=catListItem><A class=listitem 
+  id=SingleColumn1_Categories_CatList_ctl01_LinkList_ctl24_Link 
+  href="http://www.cnblogs.com/htqx/archive/2005/06.html">2005年6月 (2)</A> 
+  <LI class=catListItem><A class=listitem 
+  id=SingleColumn1_Categories_CatList_ctl01_LinkList_ctl25_Link 
+  href="http://www.cnblogs.com/htqx/archive/2005/05.html">2005年5月 (10)</A> 
+</LI></UL>
+<H1 class=catListTitle>开发论坛</H1>
+<UL class=catList>
+  <LI class=catListItem><A class=listitem 
+  id=SingleColumn1_Categories_CatList_ctl02_LinkList_ctl01_Link 
+  href="http://www.aogosoft.com/bbs" target=_blank>AoGo汇编小站</A> 
+  <LI class=catListItem><A class=listitem 
+  id=SingleColumn1_Categories_CatList_ctl02_LinkList_ctl02_Link 
+  href="http://www.vckbase.com/bbs/" target=_blank>vc知识库</A> 
+  <LI class=catListItem><A class=listitem 
+  id=SingleColumn1_Categories_CatList_ctl02_LinkList_ctl03_Link 
+  href="http://www.gameres.com/bbs" target=_blank>游戏资源开发网</A> 
+  <LI class=catListItem><A class=listitem 
+  id=SingleColumn1_Categories_CatList_ctl02_LinkList_ctl04_Link 
+  href="http://www.cnblogs.com/team/spidergame.html" target=_blank>蜘蛛游戏开发小组</A> 
+  <LI class=catListItem><A class=listitem 
+  id=SingleColumn1_Categories_CatList_ctl02_LinkList_ctl05_Link 
+  href="http://www.gameidea.cn/">蜘蛛游戏社团</A> 
+  <LI style="MARGIN-TOP: 2px">官方网站哦 </LI></UL>
+<SCRIPT language=JavaScript>
+function SearchGoogle(key,evt,site)
+		{
+			if(evt.keyCode==13 || evt.keyCode==0 || evt.type =='click')
+			{
+				key.focus();
+				var keystr = encodeURIComponent(key.value);
+				url = "http://www.google.com/search?q=";
+				url = url+keystr;
+				url += "&ie=UTF-8&oe=GB2312&hl=zh-CN&domains="+site+"&sitesearch="+site;
+				window.location=url;
+				return false;
+			}
+		}
+</SCRIPT>
+
+<H3>搜索</H3>
+<UL>
+  <LI>
+  <LI><INPUT id=q 
+  onkeydown="return SearchGoogle(document.getElementById('q'),event,'http://www.cnblogs.com/htqx/')" 
+  style="WIDTH: 130px" name=q>&nbsp;<INPUT onclick="SearchGoogle(document.getElementById('q'),event,'http://www.cnblogs.com/htqx/')" type=button value=搜索 name=sa> 
+  </LI></UL>
+<H3>积分与排名</H3>
+<UL>
+  <LI>积分 - 53468 
+  <LI>排名 - 554 </LI></UL>
+<H3>最新评论 <A id=SingleColumn1_ctl05_RSSHyperlink1 
+href="http://www.cnblogs.com/htqx/CommentsRSS.aspx"><IMG 
+style="BORDER-TOP-WIDTH: 0px; BORDER-LEFT-WIDTH: 0px; BORDER-BOTTOM-WIDTH: 0px; BORDER-RIGHT-WIDTH: 0px" 
+src="运用智能指针的一些思路 - 我是科学家 - 博客园_files/xml.gif"></A></H3>
+<DIV class=RecentComment id=RecentComments>
+<UL>
+  <LI style="WORD-BREAK: break-all"><A 
+  id=SingleColumn1_ctl05_CommentList_ctl01_Hyperlink1 
+  href="http://www.cnblogs.com/htqx/archive/2008/01/05/1027305.html#1027416">1.&nbsp;re: 
+  国产操作系统有没有出路</A> 
+  <LI 
+  style="WORD-BREAK: break-all">LZ这就不明白了，不做大了怎么骗钱？小规模的能有多少经费。就象CPU一样，做嵌入式CPU(比如手机、GPS等)技术难度低，市场竞争也不激烈，等有一定基础了再做通用CPU也行。可为什么还有人一上来就做... 
+
+  <LI style="MARGIN-RIGHT: 4px; TEXT-ALIGN: right">--flysnow 
+  <LI style="WORD-BREAK: break-all"><A 
+  id=SingleColumn1_ctl05_CommentList_ctl02_Hyperlink1 
+  href="http://www.cnblogs.com/htqx/archive/2008/01/05/1027305.html#1027389">2.&nbsp;re: 
+  国产操作系统有没有出路</A> 
+  <LI style="WORD-BREAK: break-all">博主典型的拿来主义。 <BR>如果毛主席听到要气死。 
+  <BR>苏联是我们最强的盟友拥有原子弹我们就不造啦，最后我们造原子弹好处多好啊。 <BR>如果全是拿来主义中国都永远不能成为大国了。 
+  <LI style="MARGIN-RIGHT: 4px; TEXT-ALIGN: right">--Zeus3 
+  <LI style="WORD-BREAK: break-all"><A 
+  id=SingleColumn1_ctl05_CommentList_ctl03_Hyperlink1 
+  href="http://www.cnblogs.com/htqx/archive/2008/01/05/1027305.html#1027388">3.&nbsp;re: 
+  国产操作系统有没有出路</A> 
+  <LI 
+  style="WORD-BREAK: break-all">说得不错！但个人认为，依然要投入研究力量，只是别再挂那么高的目标，那样可能适得其反。此外，嵌入式操作系统应该是个比较容易取得现实效益的切入点。在低端硬件，比如“百元电脑”这样的环境下实现一个基本... 
+
+  <LI style="MARGIN-RIGHT: 4px; TEXT-ALIGN: right">--罗克 
+  <LI style="WORD-BREAK: break-all"><A 
+  id=SingleColumn1_ctl05_CommentList_ctl04_Hyperlink1 
+  href="http://www.cnblogs.com/htqx/archive/2007/12/31/963235.html#1021903">4.&nbsp;re: 
+  关于C/C++ 表达式求值顺序</A> 
+  <LI style="WORD-BREAK: break-all">表达式 i = ++i + i 这样分析是不是有些错误？行为未定指的是变量i 
+  的内容未定，而不是计算步骤未定，顺序点首先是区隔各表达式，并建立表达式的计算顺序。而各表达式是按运算符的优先级来计算子表达... 
+  <LI style="MARGIN-RIGHT: 4px; TEXT-ALIGN: right">--ray.l.h.h 
+  <LI style="WORD-BREAK: break-all"><A 
+  id=SingleColumn1_ctl05_CommentList_ctl05_Hyperlink1 
+  href="http://www.cnblogs.com/htqx/archive/2007/12/28/148845.html#1018592">5.&nbsp;re: 
+  请各位成员，注册博客，然后加入这个博客团队。谢勒~~</A> 
+  <LI style="WORD-BREAK: break-all">各位告诉你们一个玩法，我前几天参加了一个野战活动，特别刺激 
+  <LI style="MARGIN-RIGHT: 4px; TEXT-ALIGN: right">--chentingz0724 
+</LI></UL></DIV>
+<H3>阅读排行榜</H3>
+<DIV class=RecentComment id=TopViewPosts>
+<UL style="WORD-BREAK: break-all">
+  <LI><A id=SingleColumn1__3d54c6f_TopList_ctl01_Hyperlink1 
+  href="http://www.cnblogs.com/htqx/archive/2005/12/14/296926.html">1.&nbsp;c语言学习-工具使用(1412)</A> 
+
+  <LI><A id=SingleColumn1__3d54c6f_TopList_ctl02_Hyperlink1 
+  href="http://www.cnblogs.com/htqx/archive/2007/02/28/659689.html">2.&nbsp;宽字符处理函数函数与普通函数对照表(1332)</A> 
+
+  <LI><A id=SingleColumn1__3d54c6f_TopList_ctl03_Hyperlink1 
+  href="http://www.cnblogs.com/htqx/archive/2006/02/09/327415.html">3.&nbsp;开源对社会的影响(1316)</A> 
+
+  <LI><A id=SingleColumn1__3d54c6f_TopList_ctl04_Hyperlink1 
+  href="http://www.cnblogs.com/htqx/archive/2005/07/24/198951.html">4.&nbsp;如何做好一个管理者(1201)</A> 
+
+  <LI><A id=SingleColumn1__3d54c6f_TopList_ctl05_Hyperlink1 
+  href="http://www.cnblogs.com/htqx/archive/2005/07/25/199316.html">5.&nbsp;汇编寻址模式(972)</A> 
+  </LI></UL></DIV>
+<H3>评论排行榜</H3>
+<DIV class=RecentComment id=TopCommentsPosts>
+<UL style="WORD-BREAK: break-all">
+  <LI><A id=SingleColumn1__3c59032_TopList_ctl01_Hyperlink1 
+  href="http://www.cnblogs.com/htqx/archive/2006/02/09/327415.html">1.&nbsp;开源对社会的影响(30)</A> 
+
+  <LI><A id=SingleColumn1__3c59032_TopList_ctl02_Hyperlink1 
+  href="http://www.cnblogs.com/htqx/archive/2005/05/02/148845.html">2.&nbsp;请各位成员，注册博客，然后加入这个博客团队。谢勒~~(27)</A> 
+
+  <LI><A id=SingleColumn1__3c59032_TopList_ctl03_Hyperlink1 
+  href="http://www.cnblogs.com/htqx/archive/2007/07/04/805586.html">3.&nbsp;个人求职简历(10)</A> 
+
+  <LI><A id=SingleColumn1__3c59032_TopList_ctl04_Hyperlink1 
+  href="http://www.cnblogs.com/htqx/archive/2007/03/22/683789.html">4.&nbsp;数据库查询分析器 
+  1.1 发布(6)</A> 
+  <LI><A id=SingleColumn1__3c59032_TopList_ctl05_Hyperlink1 
+  href="http://www.cnblogs.com/htqx/archive/2007/05/28/763086.html">5.&nbsp;程序员学习的方向(6)</A> 
+  </LI></UL></DIV>
+<H3>60天内阅读排行</H3>
+<DIV class=RecentComment>
+<UL>
+  <LI><A id=SingleColumn1__36a8b09_TopList_ctl01_Hyperlink1 
+  href="http://www.cnblogs.com/htqx/archive/2007/11/21/967717.html">1.&nbsp;大牛的编码程序(136)</A> 
+
+  <LI><A id=SingleColumn1__36a8b09_TopList_ctl02_Hyperlink1 
+  href="http://www.cnblogs.com/htqx/archive/2008/01/05/1027305.html">2.&nbsp;国产操作系统有没有出路(93)</A> 
+
+  <LI><A id=SingleColumn1__36a8b09_TopList_ctl03_Hyperlink1 
+  href="http://www.cnblogs.com/htqx/archive/2007/12/04/982893.html">3.&nbsp;今天你114了么？(76)</A> 
+
+  <LI><A id=SingleColumn1__36a8b09_TopList_ctl04_Hyperlink1 
+  href="http://www.cnblogs.com/htqx/archive/2008/01/03/1025172.html">4.&nbsp;GNU 
+  GCC 手册1(69)</A> 
+  <LI><A id=SingleColumn1__36a8b09_TopList_ctl05_Hyperlink1 
+  href="http://www.cnblogs.com/htqx/archive/2008/01/01/1022188.html">5.&nbsp;在windows下编译cldc 
+  KVM(55)</A> </LI></UL></DIV>
+<UL>
+  <LI>
+  <DIV id=cnblogsgooglead height="150" width="180"></DIV>
+  <DIV id=cnblogsgoogleadcode style="DISPLAY: none">
+  <SCRIPT type=text/javascript><!--
+google_ad_client = "pub-4210569241504288";
+google_ad_width = 180;
+google_ad_height = 150;
+google_ad_format = "180x150_as";
+google_ad_channel ="";
+google_ad_type = "text";
+//--></SCRIPT>
+
+  <SCRIPT src="运用智能指针的一些思路 - 我是科学家 - 博客园_files/show_ads.js" 
+type=text/javascript>
+</SCRIPT>
+  </DIV></LI></UL></DIV></DIV><!-- //右侧工具部分 --></DIV><!-- right ends --></DIV>
+<DIV class=clear></DIV>
+<DIV id=footer>Copyright ©2008 航天奇侠 </DIV></DIV></DIV>
+<SCRIPT type=text/javascript>
+<!--
+var Page_ValidationSummaries =  new Array(document.getElementById("AjaxHolder_PostComment_ValidationSummary1"));
+var Page_Validators =  new Array(document.getElementById("AjaxHolder_PostComment_RequiredFieldValidator1"), document.getElementById("AjaxHolder_PostComment_RequiredFieldValidator2"), document.getElementById("AjaxHolder_PostComment_revContactMail"), document.getElementById("AjaxHolder_PostComment_Requiredfieldvalidator4"), document.getElementById("AjaxHolder_PostComment_RequiredFieldValidator3"));
+// -->
+</SCRIPT>
+
+<SCRIPT type=text/javascript>
+<!--
+var AjaxHolder_PostComment_RequiredFieldValidator1 = document.all ? document.all["AjaxHolder_PostComment_RequiredFieldValidator1"] : document.getElementById("AjaxHolder_PostComment_RequiredFieldValidator1");
+AjaxHolder_PostComment_RequiredFieldValidator1.controltovalidate = "AjaxHolder_PostComment_tbTitle";
+AjaxHolder_PostComment_RequiredFieldValidator1.errormessage = "请输入标题";
+AjaxHolder_PostComment_RequiredFieldValidator1.evaluationfunction = "RequiredFieldValidatorEvaluateIsValid";
+AjaxHolder_PostComment_RequiredFieldValidator1.initialvalue = "";
+var AjaxHolder_PostComment_RequiredFieldValidator2 = document.all ? document.all["AjaxHolder_PostComment_RequiredFieldValidator2"] : document.getElementById("AjaxHolder_PostComment_RequiredFieldValidator2");
+AjaxHolder_PostComment_RequiredFieldValidator2.controltovalidate = "AjaxHolder_PostComment_tbName";
+AjaxHolder_PostComment_RequiredFieldValidator2.errormessage = "请输入你的姓名";
+AjaxHolder_PostComment_RequiredFieldValidator2.evaluationfunction = "RequiredFieldValidatorEvaluateIsValid";
+AjaxHolder_PostComment_RequiredFieldValidator2.initialvalue = "";
+var AjaxHolder_PostComment_revContactMail = document.all ? document.all["AjaxHolder_PostComment_revContactMail"] : document.getElementById("AjaxHolder_PostComment_revContactMail");
+AjaxHolder_PostComment_revContactMail.controltovalidate = "AjaxHolder_PostComment_tbEmail";
+AjaxHolder_PostComment_revContactMail.errormessage = "邮件地址无效";
+AjaxHolder_PostComment_revContactMail.evaluationfunction = "RegularExpressionValidatorEvaluateIsValid";
+AjaxHolder_PostComment_revContactMail.validationexpression = "^([0-9a-zA-Z+-._]([+-._\\w]*[0-9a-zA-Z+-._])*@([0-9a-zA-Z][-\\w]*\\.)+[a-zA-Z]{2,9})$";
+var AjaxHolder_PostComment_Requiredfieldvalidator4 = document.all ? document.all["AjaxHolder_PostComment_Requiredfieldvalidator4"] : document.getElementById("AjaxHolder_PostComment_Requiredfieldvalidator4");
+AjaxHolder_PostComment_Requiredfieldvalidator4.controltovalidate = "AjaxHolder_PostComment_CodeNumberTextBox";
+AjaxHolder_PostComment_Requiredfieldvalidator4.errormessage = "请输入验证码";
+AjaxHolder_PostComment_Requiredfieldvalidator4.display = "Dynamic";
+AjaxHolder_PostComment_Requiredfieldvalidator4.evaluationfunction = "RequiredFieldValidatorEvaluateIsValid";
+AjaxHolder_PostComment_Requiredfieldvalidator4.initialvalue = "";
+var AjaxHolder_PostComment_RequiredFieldValidator3 = document.all ? document.all["AjaxHolder_PostComment_RequiredFieldValidator3"] : document.getElementById("AjaxHolder_PostComment_RequiredFieldValidator3");
+AjaxHolder_PostComment_RequiredFieldValidator3.controltovalidate = "AjaxHolder_PostComment_tbComment";
+AjaxHolder_PostComment_RequiredFieldValidator3.errormessage = "请输入评论内容";
+AjaxHolder_PostComment_RequiredFieldValidator3.evaluationfunction = "RequiredFieldValidatorEvaluateIsValid";
+AjaxHolder_PostComment_RequiredFieldValidator3.initialvalue = "";
+var AjaxHolder_PostComment_ValidationSummary1 = document.all ? document.all["AjaxHolder_PostComment_ValidationSummary1"] : document.getElementById("AjaxHolder_PostComment_ValidationSummary1");
+AjaxHolder_PostComment_ValidationSummary1.showmessagebox = "True";
+AjaxHolder_PostComment_ValidationSummary1.showsummary = "False";
+// -->
+</SCRIPT>
+
+<SCRIPT type=text/javascript>
+<!--
+var Page_ValidationActive = false;
+if (typeof(ValidatorOnLoad) == "function") {
+    ValidatorOnLoad();
+}
+
+function ValidatorOnSubmit() {
+    if (Page_ValidationActive) {
+        return ValidatorCommonOnSubmit();
+    }
+    else {
+        return true;
+    }
+}
+// -->
+</SCRIPT>
+
+<SCRIPT type=text/javascript>
+<!--
+
+document.getElementById('AjaxHolder_PostComment_ValidationSummary1').dispose = function() {
+    Array.remove(Page_ValidationSummaries, document.getElementById('AjaxHolder_PostComment_ValidationSummary1'));
+}
+Sys.Application.initialize();
+
+document.getElementById('AjaxHolder_PostComment_RequiredFieldValidator1').dispose = function() {
+    Array.remove(Page_Validators, document.getElementById('AjaxHolder_PostComment_RequiredFieldValidator1'));
+}
+
+document.getElementById('AjaxHolder_PostComment_RequiredFieldValidator2').dispose = function() {
+    Array.remove(Page_Validators, document.getElementById('AjaxHolder_PostComment_RequiredFieldValidator2'));
+}
+
+document.getElementById('AjaxHolder_PostComment_revContactMail').dispose = function() {
+    Array.remove(Page_Validators, document.getElementById('AjaxHolder_PostComment_revContactMail'));
+}
+
+document.getElementById('AjaxHolder_PostComment_Requiredfieldvalidator4').dispose = function() {
+    Array.remove(Page_Validators, document.getElementById('AjaxHolder_PostComment_Requiredfieldvalidator4'));
+}
+
+document.getElementById('AjaxHolder_PostComment_RequiredFieldValidator3').dispose = function() {
+    Array.remove(Page_Validators, document.getElementById('AjaxHolder_PostComment_RequiredFieldValidator3'));
+}
+// -->
+</SCRIPT>
+</FORM>
+<SCRIPT src="运用智能指针的一些思路 - 我是科学家 - 博客园_files/ShowHidden.js" 
+type=text/javascript></SCRIPT>
+</BODY></HTML>
