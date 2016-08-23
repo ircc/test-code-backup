@@ -1,4 +1,4 @@
-Component.h
+ï»¿Component.h
 class Component
 {
 public: 
@@ -21,7 +21,7 @@ public:
 	Composite(){}//vector<Component*>::iterator itend = comVec.begin(); 
 	~Composite(){}
 public:
-	//µ÷³öËùÓĞ²Ù×÷
+	//è°ƒå‡ºæ‰€æœ‰æ“ä½œ
 	void Operation()
 	{
 		vector<Component*>::iterator comIter = comVec.begin();
@@ -30,17 +30,17 @@ public:
 			(*comIter)->Operation();
 		}
 	}
-//Ìí¼Ó×é¼ş
+//æ·»åŠ ç»„ä»¶
 	void Add(Component* com)
 	{
 		comVec.push_back(com);
 	}
-	//ÒÆ³ı×é¼ş
+	//ç§»é™¤ç»„ä»¶
 	void Remove(Component* com)
 	{
 		comVec.erase(&com);
 	}
-	//µÃµ½×é¼ş
+	//å¾—åˆ°ç»„ä»¶
 	Component* GetChild(int index)
 	{
 		return comVec[index];
@@ -62,7 +62,7 @@ public:
 	~LeafA(){}
 	void Operation()
 	{
-		cout<<"×é³É²Ù×÷A....."<<endl;
+		cout<<"ç»„æˆæ“ä½œA....."<<endl;
 	}
 protected:
 private:
@@ -75,7 +75,7 @@ public:
 	~LeafB(){}
 	void Operation()
 	{
-		cout<<"×é³É²Ù×÷B....."<<endl;
+		cout<<"ç»„æˆæ“ä½œB....."<<endl;
 	}
 protected:
 private:
