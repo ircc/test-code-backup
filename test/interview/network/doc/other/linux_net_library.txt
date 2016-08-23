@@ -1,0 +1,10 @@
+libevent
+libev
+libuv
+libcurl
+asio boost ace 
+skynet 
+muduo
+
+
+http://blog.csdn.net/crazywdy/article/details/33790945
