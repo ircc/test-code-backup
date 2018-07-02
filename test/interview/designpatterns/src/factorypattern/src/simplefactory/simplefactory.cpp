@@ -22,6 +22,7 @@ using namespace std;
 // 
 //心得:优点是只要实现共有的接口就可以实现不同车跑的方式.但缺点就是要判断哪一种车,造成要修改Driver 类
 
+// 产品类
 class ICar
 {
 public:
@@ -54,6 +55,7 @@ public:
 
 #define CAR_TYPE_BMW 1
 #define CAR_TYPE_BENZ 2
+// 工厂类
 class Driver
 {
 public:
