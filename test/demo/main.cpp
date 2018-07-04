@@ -26,10 +26,16 @@ int main()
     test_mutex();
 #endif
 
-#if 1 
+#if 0
     // 临界区critical sections 测试    
     test_critical_sections();
 #endif
+
+#if 1 
+    // 子进程 测试    
+    test_child_process();
+#endif
+
     return 0;
 }
 
