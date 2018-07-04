@@ -265,6 +265,15 @@ CMake中，判断的用法如下：
 * add_dependencies：包含一个依赖库文件夹；
 * add_subdirectory：向当前工程添加存放源文件的子目录；
 * aux_source_directory ：不在当前目录下的其他地方的源文件；
-* include_directories:  指明文件所在路径；
+* include_directories:  指明文件所在路径；eg:include_directories(${PROJECT_SOURCE_DIR}/include   ${PROJECT_SOURCE_DIR}/abc) 
 * set_target_properties:设置文件为另外一个名字。set_target_properties(libhello PROPERTIES OUTPUT_NAME "hello")
 * source_group：当文件都在同一个路径下面使用
+
+### FIND_系列指令
+
+FIND_系列指令主要包含一下指令：
+
+    FIND_FILE(<VAR> name1 path1 path2 ...)    # VAR变量代表找到的文件全路径，包含文件名
+    FIND_LIBRARY(<VAR> name1 path1 path2 ...) # VAR变量表示找到的库全路径，包含库文件名
+    FIND_PATH(<VAR> name1 path1 path2 ...)    # VAR变量代表包含这个文件的路径。
+    FIND_PROGRAM(<VAR> name1 path1 path2 ...) # VAR变量代表包含这个程序的全路径。

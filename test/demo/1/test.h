@@ -2,11 +2,11 @@
 #define TEST_H
 #include <iostream>
 using namespace std;
-class Test
+class testA
 {
 public:
-    Test(){};
-    virtual ~Test(){};
+    testA(){};
+    virtual ~testA(){};
 
 public:
     int Add(int a,int b);
@@ -17,14 +17,26 @@ public:
     virtual void Fun() ;
 };
 
-class B : public Test
+class testB : public testA
 {
 public:
-    B(){};
-    ~B(){};
+    testB(){};
+    ~testB(){};
 
 public:
     virtual void Fun();
 };
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+#include <pthread.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include<unistd.h>
+
+#define NUM 6
+
+void *thread_function(void *arg);
+int test_thread();
 
 #endif // TEST_H
