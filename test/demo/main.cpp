@@ -10,10 +10,17 @@ int main()
     cout << "Hello World!" << endl;
 #endif
 
-#if 1 
+#if 0 
     // thread 测试    
     test_thread();
 #endif
+
+
+#if 1 
+    // semaphore 测试    
+    test_semaphore();
+#endif
+
     return 0;
 }
 

@@ -34,10 +34,9 @@ void testB::Fun()
     std::cout << "testB is Running"<<endl;
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-
-void *thread_function(void *arg)
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+void* thread_function(void *arg)
 {
     long my_number = reinterpret_cast<long>(arg);
     int rand_num;
@@ -83,6 +82,71 @@ int test_thread()
     }
 
     printf("All done\n");
+
+    exit(EXIT_SUCCESS);
+}
+
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+#define SIZE 1024
+
+char buffer[SIZE];
+sem_t sem;
+
+
+void* semaphore_thread_function(void *arg)
+{
+    sem_wait(&sem);
+    while (strncmp("end", buffer, 3) != 0)
+    {
+        printf("You input %d characters\n", strlen(buffer));
+        sem_wait(&sem);
+    }
+    pthread_exit(NULL);
+}
+
+int test_semaphore()
+{
+    int res;
+    pthread_t a_thread;
+    void *thread_result;
+
+    res = sem_init(&sem, 0, 0);
+    if (res != 0)
+    {
+        perror("Sem init failed");
+        exit(EXIT_FAILURE);
+    }
+
+    res = pthread_create(&a_thread, NULL, semaphore_thread_function, NULL);
+    if (res != 0)
+    {
+        perror("Thread create failed");
+        exit(EXIT_FAILURE);
+    }
+
+    printf("Input some text. Enter 'end' to finish\n");
+
+    while (scanf("%s", buffer))
+    {
+        sem_post(&sem);
+        if (strncmp("end", buffer, 3) == 0)
+            break;
+    }
+
+    printf ("\nWaiting for thread to finish...\n");
+
+    res = pthread_join(a_thread, &thread_result);
+    if (res != 0)
+    {
+        perror("Thread join failed");
+        exit(EXIT_FAILURE);
+    }
+
+    printf ("Thread join\n");
+
+    sem_destroy(&sem);
 
     exit(EXIT_SUCCESS);
 }
