@@ -31,11 +31,16 @@ int main()
     test_critical_sections();
 #endif
 
-#if 1 
+#if 0 
     // 子进程 测试    
     test_child_process();
 #endif
 
+
+#if 2 
+    // 管道 测试    
+    test_pipe();
+#endif
     return 0;
 }
 
