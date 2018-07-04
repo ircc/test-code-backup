@@ -94,13 +94,12 @@ int test_thread()
 char buffer[SIZE];
 sem_t sem;
 
-
-void* semaphore_thread_function(void *arg)
+void* semaphore_thread_function(void*)
 {
     sem_wait(&sem);
     while (strncmp("end", buffer, 3) != 0)
     {
-        printf("You input %d characters\n", strlen(buffer));
+        printf("You input %u characters\n", strlen(buffer));
         sem_wait(&sem);
     }
     pthread_exit(NULL);
@@ -149,4 +148,50 @@ int test_semaphore()
     sem_destroy(&sem);
 
     exit(EXIT_SUCCESS);
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+int i=1;
+pthread_mutex_t mutex = PTHREAD_MUTEX_INITIALIZER; /*初始化互斥锁*/
+pthread_cond_t cond = PTHREAD_COND_INITIALIZER;    /*初始化条件变量*/
+
+void *thread1(void*)
+{
+    for(i=1;i<=3;i++)
+    {
+        pthread_mutex_lock(&mutex);/*锁住互斥量*/
+        if(i%3==0)
+            pthread_cond_signal(&cond);/*条件改变，发送信号，通知t_b进程*/
+        else
+            printf("thead1:%d\n",i);
+        pthread_mutex_unlock(&mutex);/*解锁互斥量*/
+        sleep(1);
+    }
+}
+
+void *thread2(void*)
+{
+    while(i<9)
+    {
+        pthread_mutex_lock(&mutex);
+        if(i%3!=0)
+            pthread_cond_wait(&cond,&mutex);/*等待*/
+        printf("thread2:%d\n",i);
+        pthread_mutex_unlock(&mutex);
+        sleep(1);
+    }
+}
+
+int test_mutex(void)
+{
+    pthread_t t_a;
+    pthread_t t_b;
+
+    pthread_create(&t_a,NULL,thread2,(void *)NULL);/*创建进程t_a*/
+    pthread_create(&t_b,NULL,thread1,(void *)NULL); /*创建进程t_b*/
+    pthread_join(t_b, NULL);/*等待进程t_b结束*/
+    pthread_mutex_destroy(&mutex);
+    pthread_cond_destroy(&cond);
+    exit(0);
 }

@@ -16,11 +16,15 @@ int main()
 #endif
 
 
-#if 1 
+#if 0
     // semaphore 测试    
     test_semaphore();
 #endif
 
+#if 1 
+    // mutex 测试    
+    test_mutex();
+#endif
     return 0;
 }
 
