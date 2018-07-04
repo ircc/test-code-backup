@@ -1,0 +1,4 @@
+# 最简的cmake编译文件
+# 执行以下语句即可:cmake cmake_simple.txt .
+PROJECT(HELLO)
+ADD_EXECUTABLE(hello hello.c)

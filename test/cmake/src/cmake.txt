@@ -1,0 +1,133 @@
+## 执行:cmake -P cmake.txt
+## CMake中使用"#"表示注释该行代码
+
+message("赋值########################################################################################################################################")
+######################################################################################################################################################
+# message打印消息
+message("Hello world")
+
+######################################################################################################################################################
+# 设置变量
+set(myVar "This is a test print!")
+message("${myVar}")
+
+######################################################################################################################################################
+# 打印变量
+set(myvar "a" "b")
+message("${myvar}")
+message(${myvar})
+
+message("循环########################################################################################################################################")
+######################################################################################################################################################
+# 循环打印list
+message("foreach 打印list成员值")
+set(mylist "a" "b" c "d")
+foreach(_var ${mylist})
+    message("当前变量是：${_var}")
+endforeach()
+
+######################################################################################################################################################
+# 这里是演示了计算从0一直加到100的结果。注：math()是数学计算函数
+message("foreach 自增")
+set(result 0)
+foreach(_var RANGE 0 100)
+    math(EXPR result "${result}+${_var}")
+endforeach()
+message("from 0 plus to 100 is:${result}")
+
+######################################################################################################################################################
+# list(LENGTH)
+set(mylist a b c d )
+list(LENGTH mylist _length)
+message("列表中元素的个数为:${_length}")
+
+######################################################################################################################################################
+# 稍微综合一点的示例:
+# 生成一个列表a，再将这个列表反序，得到列表b，然后将列表a、b中相应位置的元素合并
+set(strList "a" "b" "c" "d")
+set(reverList ${strList})
+list(REVERSE reverList)
+message("${reverList}")
+foreach(_var ${reverList})
+    list(FIND strList ${_var} temp)
+    list(GET reverList ${temp} reverItem)
+    list(APPEND result "${_var}${reverItem}")
+    message("当前元素序号 :${temp}")
+endforeach()
+
+message("判断########################################################################################################################################")
+######################################################################################################################################################
+if(WIN32)
+    message("this operation platform is windows")
+elseif(UNIX)
+    message("this operation platform is Linux")
+endif()
+
+
+message("宏、函数########################################################################################################################################")
+######################################################################################################################################################
+macro(sum outvar)
+    set(_args ${ARGN})
+    list(LENGTH _args argLength)
+    # 限制不能超过4个数字
+    if(NOT argLength LESS 4)
+        message(FATAL_ERROR "to much args!")
+    endif()
+    set(result 0)
+    
+    foreach(_var ${ARGN})
+        math(EXPR result "${result}+${_var}")
+    endforeach()
+    
+    set(${outvar} ${result})
+endmacro()
+
+# 这里会报错Call Stack (most recent call first)，原因不明，先注释掉
+#sum(addResult 1 2 3 4 5)
+message("Result is :${addResult}")
+
+# CMake中的函数("function")与宏唯一的区别就在于，函数不能像宏那样将计算结果传出来(也不是完全不能，只是复杂一些)，并且函数中的变量是局部的，而宏中的变量在外面也可以被访问到
+macro(macroTest)
+    set(test1 "aaa")
+endmacro()
+
+function(funTest)
+    set(test2 "bbb")
+endfunction()
+
+macroTest()
+message("${test1}")
+
+funTest()
+message("${test2}")
+
+message("宗合示例 这个宏是找出指定数值范围内全部素数，并输出 ############################################################################################")
+######################################################################################################################################################
+macro(GetPrime output maxNum)
+    set(extArg ${ARGN})
+    if(extArg)
+        message(SEND_ERROR "To much args!")
+    endif()
+
+    # 没有判断传入的变量是否为数字类型
+    set(result)
+    foreach(_var RANGE 2 ${maxNum})
+        set(isPrime 1)
+        math(EXPR upplimit ${_var}-1)
+        foreach(_subVar RANGE 2 ${upplimit})
+            math(EXPR _temp "${_var}%${_subVar}")
+            if(_temp EQUAL 0)
+                set(isPrime 0)
+                break()
+            endif()
+        endforeach()
+
+        if(isPrime)
+            list(APPEND result ${_var})
+        endif()
+    endforeach()
+    set(output ${result})
+endmacro()
+
+GetPrime(output 100)
+message("${output}")
