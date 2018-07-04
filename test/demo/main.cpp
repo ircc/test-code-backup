@@ -21,9 +21,14 @@ int main()
     test_semaphore();
 #endif
 
-#if 1 
+#if 0
     // mutex 测试    
     test_mutex();
+#endif
+
+#if 1 
+    // 临界区critical sections 测试    
+    test_critical_sections();
 #endif
     return 0;
 }
