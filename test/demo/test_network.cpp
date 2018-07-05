@@ -135,8 +135,7 @@ int test_udp_client(/* int agrc, char *argv[] */)
     struct sockaddr_in server_addr;
     int server_len = 0;
     int sockfd = -1;
-    int result = 0;
-    char c = 'A';
+     char c = 'A';
     // //取第一个参数的第一个字符
     // if(agrc > 1)
     //     c = argv[1][0];

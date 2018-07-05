@@ -42,6 +42,19 @@ int test_demo()
     //test_pipe();
     test_pipe2();
 #endif
+
+#if 0
+    test_other();
+#endif
+
+#if 0
+    test_thread_lock();
+#endif
+
+#if 1
+    test_thread_critical_sections();
+#endif
+
     return 0;
 }
 
@@ -71,12 +84,12 @@ int test_network()
 
 int main()
 {
-#if 0 
+#if 1 
     // demo 测试    
     test_demo();
 #endif
 
-#if 1 
+#if 0 
     // network 测试    
     test_network();
 #endif
