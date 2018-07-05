@@ -1,7 +1,7 @@
 
 #include "test.h"
 
-int main()
+int test_demo()
 {
 #if 0 
     // virtual 测试    
@@ -37,10 +37,41 @@ int main()
 #endif
 
 
-#if 1 
+#if 0 
     // 管道 测试    
-    test_pipe();
+    //test_pipe();
+    test_pipe2();
 #endif
     return 0;
 }
 
+#include "test_network.h"
+
+int test_network()
+{
+#if 0 
+    test_tcp_server();
+#endif
+
+#if 1 
+    test_tcp_client();
+#endif
+
+    return 0;
+}
+
+
+int main()
+{
+#if 0 
+    // demo 测试    
+    test_demo();
+#endif
+
+#if 1 
+    // network 测试    
+    test_network();
+#endif
+
+    return 0;
+}

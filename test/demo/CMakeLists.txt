@@ -5,10 +5,10 @@ cmake_minimum_required(VERSION 2.8)
 project (helloworld)
 
 # 设置变量的值
-SET(SRC_LIST test.h test.cpp)
+SET(SRC_LIST test.h test.cpp test_network.h test_network.cpp)
 
 # 查找当前目录下所有的源文件并保存到SRC_LIST变量中
-aux_source_directory(.  SRC_LIST) 
+# aux_source_directory(.  SRC_LIST) 
 
 # 查找库所在目录 找到的库全路径，包含库文件名
 FIND_LIBRARY(PTHREAD_LIB pthread /usr/lib /usr/local/lib NO_DEFAULT_PATH)
