@@ -53,8 +53,16 @@ int test_network()
     test_tcp_server();
 #endif
 
-#if 1 
+#if 0 
     test_tcp_client();
+#endif
+
+#if 0 
+    test_udp_server();
+#endif
+
+#if 1 
+    test_udp_client();
 #endif
 
     return 0;

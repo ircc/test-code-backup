@@ -49,8 +49,6 @@ int test_tcp_server()
     }
 }
 
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
 int test_tcp_client()
 {
     int sockfd = -1;
@@ -78,6 +76,84 @@ int test_tcp_client()
     //从服务器获取数据
     read(sockfd, &ch, 1);
     printf("char form server = %c\n", ch);
+    close(sockfd);
+    exit(0);
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+int test_udp_server()
+{
+    int server_sockfd = -1;
+    int server_len = 0;
+    int client_len = 0;
+    char buffer[512];
+    int result = 0;
+    struct sockaddr_in server_addr;
+    struct sockaddr_in client_addr;
+    //创建数据报套接字
+    server_sockfd = socket(AF_INET, SOCK_DGRAM, 0);
+    //设置监听IP端口
+    server_addr.sin_family = AF_INET;
+    server_addr.sin_addr.s_addr = htonl(INADDR_ANY);
+    server_addr.sin_port = htons(9739);
+    server_len = sizeof(server_addr);
+    //绑定（命名）套接字
+    bind(server_sockfd, (struct sockaddr*)&server_addr, server_len);
+    //忽略子进程停止或退出信号
+    signal(SIGCHLD, SIG_IGN);
+
+
+    while(1)
+    {
+        //接收数据，用client_addr来储存数据来源程序的IP端口
+        result = recvfrom(server_sockfd, buffer, sizeof(buffer), 0,
+                (struct sockaddr*)&client_addr, (socklen_t*)&client_len);
+        //if(fork() == 0)
+      //  {
+            //利用子进程来处理数据
+            //buffer[0] += 'a' - 'A';
+            sleep(5);
+            //发送处理后的数据
+         printf("%c\n", buffer[0]);
+            int n = sendto(server_sockfd, buffer,result,0 ,
+                (struct sockaddr*)&client_addr, client_len);
+            printf("n:%d, buffer:%c\n", n, buffer[0]);
+            break;
+            //注意，一定要关闭子进程，否则程序运行会不正常
+          //  exit(0);
+      //  }
+   }
+    //关闭套接字
+    close(server_sockfd);
+    exit(0);
+}
+
+int test_udp_client(/* int agrc, char *argv[] */)
+{
+    struct sockaddr_in server_addr;
+    int server_len = 0;
+    int sockfd = -1;
+    int result = 0;
+    char c = 'A';
+    // //取第一个参数的第一个字符
+    // if(agrc > 1)
+    //     c = argv[1][0];
+    //创建数据报套接字
+    sockfd = socket(AF_INET, SOCK_DGRAM, 0);
+    //设置服务器IP端口
+    server_addr.sin_family = AF_INET;
+    server_addr.sin_addr.s_addr = inet_addr("127.0.0.1");
+    server_addr.sin_port = htons(9739);
+    server_len = sizeof(server_addr);
+    //向服务器发送数据
+    int n = sendto(sockfd, &c, sizeof(char), 0,
+        (struct sockaddr*)&server_addr, server_len);
+    //接收服务器处理后发送过来的数据，由于不关心数据来源，所以把后两个参数设为0
+    n = recvfrom(sockfd, &c, sizeof(char), 0, 0, 0);
+    printf("char from server = %c\n", c);
+    //关闭套接字
     close(sockfd);
     exit(0);
 }
