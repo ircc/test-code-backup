@@ -82,10 +82,10 @@ union semun
     unsigned short *arry;
 };
 
-static int set_semvalue();
-static void del_semvalue();
-static int semaphore_p();
-static int semaphore_v();
+// static int set_semvalue();
+// static void del_semvalue();
+// static int semaphore_p();
+// static int semaphore_v();
 
 int test_critical_sections();
 

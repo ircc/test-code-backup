@@ -37,7 +37,7 @@ int main()
 #endif
 
 
-#if 2 
+#if 1 
     // 管道 测试    
     test_pipe();
 #endif

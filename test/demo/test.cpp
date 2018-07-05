@@ -99,7 +99,7 @@ void* semaphore_thread_function(void*)
     sem_wait(&sem);
     while (strncmp("end", buffer, 3) != 0)
     {
-        printf("You input %u characters\n", strlen(buffer));
+        printf("You input %lu characters\n", strlen(buffer));
         sem_wait(&sem);
     }
     pthread_exit(NULL);
@@ -157,7 +157,7 @@ int i=1;
 pthread_mutex_t mutex = PTHREAD_MUTEX_INITIALIZER; /*初始化互斥锁*/
 pthread_cond_t cond = PTHREAD_COND_INITIALIZER;    /*初始化条件变量*/
 
-void *thread1(void*)
+void* thread1(void*)
 {
     for(i=1;i<=3;i++)
     {
@@ -169,9 +169,10 @@ void *thread1(void*)
         pthread_mutex_unlock(&mutex);/*解锁互斥量*/
         sleep(1);
     }
+    pthread_exit(NULL);
 }
 
-void *thread2(void*)
+void* thread2(void*)
 {
     while(i<9)
     {
@@ -182,6 +183,7 @@ void *thread2(void*)
         pthread_mutex_unlock(&mutex);
         sleep(1);
     }
+    pthread_exit(NULL);
 }
 
 int test_mutex(void)
