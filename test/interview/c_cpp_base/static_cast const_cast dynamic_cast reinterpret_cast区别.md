@@ -10,7 +10,9 @@
 
 4. 非virtual继承时，可将基类指针【引用】转成派生类指针【引用】（多继承时，会做偏移处理）。如：Base*转成Derive*、Base&转成Derive&等
 
-## dynamic_cast  专门用于处理多态机制，对继承体系内的对象（类中必须含有至少一个虚函数）的指针【引用】进行转换，转换时会进行类型检查；vc在编译时要带上/EHsc /GR
+## dynamic_cast
+
+专门用于处理多态机制，对继承体系内的对象（类中必须含有至少一个虚函数）的指针【引用】进行转换，转换时会进行类型检查；vc在编译时要带上/EHsc /GR
 
 如果能转换会返回对应的指针【引用】；不能转换时，指针会返回空，引用则抛出std::bad_cast异常（const std::bad_cast& e）
 
@@ -18,7 +20,9 @@
 
 另外，对于菱形非virtual继承、非public继承，转换引用时也会抛出std::bad_cast异常
 
-## reinterpret_cast  对指针【引用】进行原始转换，不做任何偏移处理（当然：多继承时，也不会做偏移处理）
+## reinterpret_cast  
+
+对指针【引用】进行原始转换，不做任何偏移处理（当然：多继承时，也不会做偏移处理）
 
 1. 将指针【引用】转换成整型。如：float*转成int、CBase*转成int、float&转成int、CBase&转成int等
 
@@ -36,7 +40,9 @@ int& n2 = reinterpret_cast<int&>(o1);
 CBase2* o21 = reinterpret_cast<CBase2*>(&o1);
 CBase2& o22 = reinterpret_cast<CBase2&>(o1);
 
-## const_cast   去掉或增加const、volatile特性
+## const_cast   
+
+去掉或增加const、volatile特性
 
 ## C类型强制转换   形式：(type)object或type(object)
 
