@@ -1,4 +1,4 @@
-// test.cpp : �������̨Ӧ�ó������ڵ㡣
+// test.cpp : 定义控制台应用程序的入口点。
 //
 
 #include "stdafx.h"
@@ -6,9 +6,9 @@
 #include <map>
 #include <vector>
 using namespace std;
-// ���ļ���ѭ����ȡһϵ����Ŀ�����Ĵ����ظ���Ӣ�ĵ��ʷ��������У�Ҫ��ͳ��ÿ�����ʳ��ֵĴ��������ܹ����յ��ʳ��ֵ�˳�����ͳ�ơ�
-// ���ṩ�ĺ���������Ҫʵ�֣���ֱ���ã���
-// string getNextWord������//���ļ���ѭ����ȡ���ʣ�������ء��������ʾ��ȡ��������15���ӣ�
+// 从文件中循环读取一系列数目不定的大量重复的英文单词放入容器中，要求统计每个单词出现的次数，并能够按照单词出现的顺序输出统计。
+// 已提供的函数（不需要实现，可直接用）：
+// string getNextWord（）；//从文件中循环读取单词，如果返回“”，则表示读取结束。（15分钟）
 
 string getNextWord(){ return "aaaa";};
 int _tmain(int argc, _TCHAR* argv[])
@@ -18,7 +18,7 @@ int _tmain(int argc, _TCHAR* argv[])
 	std::vector<string> vtWord;
 
 
-	// ��ȡ����
+	// 获取数据
 	while(true) 
 	{
 		string strWord = getNextWord();
